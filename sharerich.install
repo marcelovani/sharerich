@@ -18,6 +18,8 @@ function sharerich_install() {
  * Implements hook_uninstall().
  */
 function sharerich_uninstall() {
+  module_load_include('module', 'sharerich');
+
   // Clean entity configurations.
   foreach (node_type_get_types() as $node) {
     variable_del('sharerich_node_' . $node->type);

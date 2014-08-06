@@ -3,3 +3,4 @@ description = Provides an Extra field for Custom Share Buttons.
 core = 7.x
 package = Sharing
 dependencies[] = token
+dependencies[] = jquery_update

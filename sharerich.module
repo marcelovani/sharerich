@@ -101,8 +101,10 @@ function sharerich_get_buttons() {
       }
     }
 
+    $title = t('Share');
+
     // Allow other modules to alter the buttons markup.
-    drupal_alter('sharerich_buttons', $buttons);
+    drupal_alter('sharerich_buttons', $buttons, $title);
 
     // Tokens replacement.
     foreach ($buttons as $key => $button) {
@@ -113,14 +115,14 @@ function sharerich_get_buttons() {
     'class' => array('sharerich-buttons', 'rrssb-buttons', 'clearfix'),
   );
   if (count($buttons) > 0) {
-    return theme_item_list(array('items' => $buttons, 'title' => t('Share'), 'type' => 'ul', 'attributes' => $attributes));
+    return theme_item_list(array('items' => $buttons, 'title' => $title, 'type' => 'ul', 'attributes' => $attributes));
   }
 }
 
 /**
  * Implements hook_sharerich_buttons_alter().
  */
-function sharerich_sharerich_buttons_alter($buttons) {
+function sharerich_sharerich_buttons_alter(&$buttons, &$title) {
 
 }
 
