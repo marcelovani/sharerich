@@ -10,7 +10,10 @@
 function sharerich_install() {
   if ($library = libraries_load('rrssb')) {
     variable_set('sharerich_add_js', libraries_get_path('rrssb') . '/js/rrssb.min.js');
-    variable_set('sharerich_add_css', libraries_get_path('rrssb') . '/css/rrssb.css');
+    variable_set('sharerich_add_css',
+      libraries_get_path('rrssb') . '/css/rrssb.css' . PHP_EOL .
+      drupal_get_path('module', 'sharerich') . '/css/sharerich.css'
+    );
   }
 }
 
