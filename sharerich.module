@@ -159,4 +159,66 @@ function sharerich_node_type_callback(&$form, &$form_state) {
   field_info_cache_clear();
 }
 
+/**
+ * Implements hook_node_prepare().
+ */
+function sharerich_node_prepare($node) {
+  if (!isset($node->sharerich)) {
+    $node->sharerich = variable_get('sharerich_node_{$node->type}', FALSE);
+  }
+}
+
+/**
+ * Implements hook_node_view().
+ */
+function sharerich_node_view($node, $view_mode, $langcode) {
+  $extra = sharerich_field_extra_fields();
+
+  // Check that we're supporting the node type being viewed.
+  if (empty($extra['node'][$node->type]['display'])) {
+    return;
+  }
+
+  $config = field_bundle_settings('node', $node->type);
+  foreach ($extra['node'][$node->type]['display'] as $field_name => $field_info) {
+    // Check to make sure this field is visible in this view mode.
+    $displays = &$config['extra_fields']['display'][$field_name];
+    if (isset($displays['default']) && !isset($displays['full'])) {
+      // Fallback for Default display when viewing full view node.
+      $displays['full'] = $displays['default'];
+    }
+    if (isset($displays[$view_mode]) && $displays[$view_mode]['visible'] == FALSE) {
+      continue;
+    }
+    if ($field_name == 'sharerich') {
+      $buttons = sharerich_get_buttons();
+      if (count($buttons)) {
+        $node->content['sharerich'] = array(
+          '#type' => 'item',
+          '#markup' => $buttons,
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function sharerich_field_extra_fields() {
+  foreach (node_type_get_types() as $node) {
+    if (variable_get('sharerich_node_' . $node->type, FALSE)) {
+      $extra['node'][$node->type]['display'] = array(
+        'sharerich' => array(
+          'label' => t('Sharerich'),
+          'description' => t('This is a fake field, you can configure it on each Display.'),
+          'weight' => 100,
+          'visible' => TRUE,
+        ),
+      );
+    }
+  }
+  return $extra;
+}
+
 
