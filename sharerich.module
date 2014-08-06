@@ -66,14 +66,9 @@ function sharerich_block_view($delta = '') {
  */
 function sharerich_get_buttons() {
   foreach (variable_get('sharerich_services', array()) as $service_name) {
-    if (!empty(variable_set('sharerich_custom_' . $service_name, ''))) {
-      $content = variable_set('sharerich_custom_' . $service_name);
-    }
-    else {
-      $content = sharerich_load_service($service_name);
-    }
+    $content = sharerich_get_service_content($service_name);
     // Tokens replacement.
-    $buttons[$service_name] = token_replace($content, array($node));
+    $buttons[$service_name] = token_replace($content);
   }
 
   $items = array();
@@ -113,6 +108,21 @@ function sharerich_load_service($service_name) {
 }
 
 /**
+ * Helper to get the service content from file or variables.
+ */
+function sharerich_get_service_content($service_name) {
+  $var_name = 'sharerich_custom_' . $service_name;
+  if (!empty(variable_get($var_name, ''))) {
+    $content = variable_get($var_name);
+  }
+  else {
+    $content = sharerich_load_service($service_name);
+  }
+
+  return $content;
+}
+
+/**
  * Implements hook_form_FORM_ID_alter().
  */
 function sharerich_form_node_type_form_alter(&$form, &$form_state) {
@@ -143,14 +153,14 @@ function sharerich_form_node_type_form_alter(&$form, &$form_state) {
  */
 function sharerich_node_type_callback(&$form, &$form_state) {
   $entity_type = $form['#node_type']->type;
-  $config = 'sharerich_node_' . $form_state['values']['type'];
+  $var_name = 'sharerich_node_' . $form_state['values']['type'];
   $form_value = $form_state['complete form']['sharerich']['show']['#value'];
   // When Sharerich is enabled for the first time on this content type, redirect to the display settings.
-  if (empty(variable_get($config)) && $form_value == TRUE) {
+  if (empty(variable_get($var_name)) && $form_value == TRUE) {
     drupal_set_message(t('Please configure the field Sharerich for each Display.'));
     $form_state['redirect'] = 'admin/structure/types/manage/' . $entity_type . '/display';
   }
-  variable_set($config, $form_value);
+  variable_set($var_name, $form_value);
   field_info_cache_clear();
 }
 

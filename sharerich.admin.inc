@@ -19,6 +19,15 @@ function sharerich_admin_form() {
     '#options' => drupal_map_assoc($options),
     '#default_value' => variable_get('sharerich_services'),
   );
+  foreach ($options as $key => $service_name) {
+    $var_name = 'sharerich_custom_' . $service_name;
+    $form[$var_name] = array(
+      '#type' => 'textarea',
+      '#title' => t('Custom code for %name', array('%name' => $service_name)),
+      '#description' => t('You can customize the code for this service.'),
+      '#default_value' => sharerich_get_service_content($service_name),
+    );
+  }
   $form['sharerich_facebook_app_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Facebook App ID'),
@@ -81,17 +90,17 @@ function sharerich_admin_form() {
 }
 
 function sharerich_admin_form_submit(&$form, $form_state) {
-  $reset = TRUE;
+  $reset = FALSE;
 
   foreach ($form_state['values']['sharerich_services'] as $service_name) {
     // If the file is not stored in the variables, read the file, otherwise save the changes on existing variable.
-    if (empty(variable_get('sharerich_custom_' . $service_name, '')) || $reset) {
-      variable_set('sharerich_custom_' . $service_name, sharerich_load_service($service_name));
+    $var_name = 'sharerich_custom_' . $service_name;
+    if (empty(variable_get($var_name, '')) || $reset) {
+      variable_set($var_name, sharerich_load_service($service_name));
     }
     else {
-      if (isset($form_state['values']['sharerich_custom'][$service_name])) {
-        // @todo test this.
-        variable_set('sharerich_custom_' . $service_name, $form_state['values']['sharerich_custom'][$service_name]['value']);
+      if (isset($form_state['values']['sharerich_custom_' . $service_name])) {
+        variable_set($var_name, $form_state['values']['sharerich_custom_' . $service_name]);
       }
     }
   }
