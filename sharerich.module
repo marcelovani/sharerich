@@ -104,3 +104,17 @@ function sharerich_get_buttons() {
   );
   return theme_item_list(array('items' => $items, 'title' => '', 'type' => 'ul', 'attributes' => $attributes));
 }
+
+/**
+ * Helper to load services from the disk.
+ */
+function sharerich_load_service($service_name) {
+  $dir = drupal_get_path('module','sharerich') . '/services';
+  $service_name = $dir . '/' . $service_name . '.inc';
+  if (file_exists($service_name)) {
+    return file_get_contents($service_name);
+  }
+  return FALSE;
+}
+
+
