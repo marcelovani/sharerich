@@ -93,16 +93,11 @@ function sharerich_get_buttons() {
       continue;
     }
   }
-  // temporary add js and css.
-  // @todo move these to admin config
-  drupal_add_css(libraries_get_path('sharerich') . '/css/sharerich.css');
-  drupal_add_css(drupal_get_path('module','sharerich') . '/css/sharerich-overrides.css');
-  drupal_add_js(libraries_get_path('sharerich') . '/js/sharerich.min.js', array('scope' => 'footer'));
 
   $attributes = array(
-    'class' => array('sharerich-buttons', 'clearfix'),
+    'class' => array('sharerich-buttons', 'rrssb-buttons', 'clearfix'),
   );
-  return theme_item_list(array('items' => $items, 'title' => '', 'type' => 'ul', 'attributes' => $attributes));
+  return theme_item_list(array('items' => $items, 'title' => t('Share'), 'type' => 'ul', 'attributes' => $attributes));
 }
 
 /**
@@ -280,4 +275,43 @@ function sharerich_tokens($type, $tokens, array $data = array(), array $options 
   }
 }
 
+/**
+ * Implements hook_page_build().
+ */
+function sharerich_page_build() {
+  if (path_is_admin(current_path())) return;
 
+  $module_path = drupal_get_path('module', 'sharerich');
+
+  // Add CSS from the configuration page.
+  $css = explode('|', preg_replace('/(\r\n?|\n)/', '|', variable_get('sharerich_add_css')));
+  foreach ($css as $key => $url) {
+    if (!empty($url)) {
+      if (stripos($url, 'http') !== FALSE) {
+        drupal_add_css($url, 'external');
+      }
+      else {
+        if (substr($url, 0, 1) != '/') {
+          $url = '/' . $url;
+        }
+        drupal_add_css($module_path . $url);
+      }
+    }
+  }
+
+  // Add Js from the configuration page.
+  $js = explode('|', preg_replace('/(\r\n?|\n)/', '|', variable_get('sharerich_add_js')));
+  foreach ($js as $key => $url) {
+    if (!empty($url)) {
+      if (stripos($url, 'http') !== FALSE) {
+        drupal_add_js($url, 'external');
+      }
+      else {
+        if (substr($url, 0, 1) != '/') {
+          $url = '/' . $url;
+        }
+        drupal_add_js($module_path . $url, array('scope' => 'footer'));
+      }
+    }
+  }
+}

@@ -63,6 +63,18 @@ function sharerich_admin_form() {
       ),
     ),
   );
+  $form['sharerich_add_js'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Add js'),
+    '#description' => t('Enter the url for each js file.'),
+    '#default_value' => variable_get('sharerich_add_js'),
+  );
+  $form['sharerich_add_css'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Add CSS'),
+    '#description' => t('Enter the url for each CSS file.'),
+    '#default_value' => variable_get('sharerich_add_css'),
+  );
   $form['#submit'][] = 'sharerich_admin_form_submit';
 
   return system_settings_form($form);
