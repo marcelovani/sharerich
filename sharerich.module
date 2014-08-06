@@ -93,6 +93,11 @@ function sharerich_get_buttons() {
       continue;
     }
   }
+  // temporary add js and css.
+  // @todo move these to admin config
+  drupal_add_css(libraries_get_path('sharerich') . '/css/sharerich.css');
+  drupal_add_css(drupal_get_path('module','sharerich') . '/css/sharerich-overrides.css');
+  drupal_add_js(libraries_get_path('sharerich') . '/js/sharerich.min.js', array('scope' => 'footer'));
 
   $attributes = array(
     'class' => array('sharerich-buttons', 'clearfix'),
