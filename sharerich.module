@@ -34,3 +34,29 @@ function sharerich_permission() {
   );
 }
 
+
+/**
+ * Implements hook_block_info().
+ */
+function sharerich_block_info() {
+  $blocks['sharerich'] = array(
+    'info' => t('Sharerich'),
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function sharerich_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'sharerich':
+      $block['subject'] = t('Share this');
+      $block['content'] = array(
+        '#markup' => sharerich_get_buttons(),
+      );
+  }
+  return $block;
+}
