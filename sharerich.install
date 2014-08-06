@@ -8,7 +8,8 @@
  * Implements hook_install().
  */
 function sharerich_install() {
-
+  variable_set('sharerich_add_js', '/libraries/rrssb/js/rrssb.js');
+  variable_set('sharerich_add_css', '/libraries/rrssb/css/rrssb.css');
 }
 
 /**
@@ -21,6 +22,8 @@ function sharerich_uninstall() {
   variable_delete('sharerich_facebook_app_id');
   variable_delete('sharerich_services');
   variable_delete('sharerich_facebook_site_url');
+  variable_delete('sharerich_add_js');
+  variable_delete('sharerich_add_css');
 
   foreach (node_type_get_types() as $node) {
     variable_delete('sharerich_node_' . $node->type);
