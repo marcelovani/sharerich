@@ -90,8 +90,7 @@ function sharerich_get_buttons() {
   $buttons = &drupal_static(__FUNCTION__, array());
 
   if (empty($buttons)) {
-    $defaults = array('email', 'facebook', 'linkedin', 'twitter', 'googleplus', 'pinterest');
-    $services = variable_get('sharerich_services', $defaults);
+    $services = sharerich_get_services();
     foreach ($services as $service_name) {
       $content = sharerich_get_service_content($service_name);
       if (!empty($content)) {
@@ -106,14 +105,16 @@ function sharerich_get_buttons() {
     drupal_alter('sharerich_buttons', $buttons);
 
     // Tokens replacement.
-    foreach ($buttons as $button) {
-      $button['data'] = token_replace($button['data']);
+    foreach ($buttons as $key => $button) {
+      $buttons[$key]['data'] = token_replace($button['data']);
     }
   }
   $attributes = array(
     'class' => array('sharerich-buttons', 'rrssb-buttons', 'clearfix'),
   );
-  return theme_item_list(array('items' => $buttons, 'title' => t('Share'), 'type' => 'ul', 'attributes' => $attributes));
+  if (count($buttons) > 0) {
+    return theme_item_list(array('items' => $buttons, 'title' => t('Share'), 'type' => 'ul', 'attributes' => $attributes));
+  }
 }
 
 /**
@@ -121,6 +122,14 @@ function sharerich_get_buttons() {
  */
 function sharerich_sharerich_buttons_alter($buttons) {
 
+}
+
+/**
+ * Helper to return the services.
+ */
+function sharerich_get_services() {
+  $defaults = array('email', 'facebook', 'linkedin', 'twitter', 'googleplus', 'pinterest');
+  return variable_get('sharerich_services', $defaults);
 }
 
 /**
@@ -319,8 +328,6 @@ function sharerich_tokens($type, $tokens, array $data = array(), array $options 
 function sharerich_page_build() {
   if (path_is_admin(current_path())) return;
 
-  $module_path = drupal_get_path('module', 'sharerich');
-
   // Add CSS from the configuration page.
   $css = explode('|', preg_replace('/(\r\n?|\n)/', '|', variable_get('sharerich_add_css')));
   foreach ($css as $key => $url) {
@@ -329,10 +336,7 @@ function sharerich_page_build() {
         drupal_add_css($url, 'external');
       }
       else {
-        if (substr($url, 0, 1) != '/') {
-          $url = '/' . $url;
-        }
-        drupal_add_css($module_path . $url);
+        drupal_add_css($url);
       }
     }
   }
@@ -345,10 +349,7 @@ function sharerich_page_build() {
         drupal_add_js($url, 'external');
       }
       else {
-        if (substr($url, 0, 1) != '/') {
-          $url = '/' . $url;
-        }
-        drupal_add_js($module_path . $url, array('scope' => 'footer'));
+        drupal_add_js($url, array('scope' => 'footer'));
       }
     }
   }

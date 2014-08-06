@@ -17,7 +17,7 @@ function sharerich_admin_form() {
     '#type' => 'checkboxes',
     '#title' => t('Available Services.'),
     '#options' => drupal_map_assoc($options),
-    '#default_value' => variable_get('sharerich_services'),
+    '#default_value' => sharerich_get_services(),
   );
   foreach ($options as $key => $service_name) {
     $var_name = 'sharerich_custom_' . $service_name;
@@ -26,6 +26,11 @@ function sharerich_admin_form() {
       '#title' => t('Custom code for %name', array('%name' => $service_name)),
       '#description' => t('You can customize the code for this service.'),
       '#default_value' => sharerich_get_service_content($service_name),
+      '#states' => array(
+        'invisible' => array(
+          ':input[name="sharerich_services[' . $service_name . ']"]' => array('checked' => FALSE),
+        ),
+      ),
     );
   }
   $form['sharerich_facebook_app_id'] = array(

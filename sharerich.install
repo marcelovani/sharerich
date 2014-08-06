@@ -23,7 +23,7 @@ function sharerich_uninstall() {
     variable_del('sharerich_node_' . $node->type);
   }
   // Clean service configurations.
-  foreach (variable_get('sharerich_services') as $service_name) {
+  foreach (sharerich_get_services() as $service_name) {
     variable_del('sharerich_node_' . $service_name);
   }
   // Clean all the rest.
