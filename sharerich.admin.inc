@@ -63,6 +63,25 @@ function sharerich_admin_form() {
       ),
     ),
   );
+  $form['#submit'][] = 'sharerich_admin_form_submit';
 
   return system_settings_form($form);
+}
+
+function sharerich_admin_form_submit(&$form, $form_state) {
+  $reset = TRUE;
+
+  foreach ($form_state['values']['sharerich_services'] as $service_name) {
+    // If the file is not stored in the variables, read the file, otherwise save the changes on existing variable.
+    if (empty(variable_get('sharerich_custom_' . $service_name, '')) || $reset) {
+      variable_set('sharerich_custom_' . $service_name, sharerich_load_service($service_name));
+    }
+    else {
+      if (isset($form_state['values']['sharerich_custom'][$service_name])) {
+        // @todo test this.
+        variable_set('sharerich_custom_' . $service_name, $form_state['values']['sharerich_custom'][$service_name]['value']);
+      }
+    }
+  }
+}
 
