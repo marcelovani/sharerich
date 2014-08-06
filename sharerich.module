@@ -60,3 +60,38 @@ function sharerich_block_view($delta = '') {
   }
   return $block;
 }
+
+/**
+ * Returns markup with list of share buttons.
+ */
+function sharerich_get_buttons() {
+  foreach (variable_get('sharerich_services', array()) as $service_name) {
+    if (!empty(variable_set('sharerich_custom_' . $service_name, ''))) {
+      $content = variable_set('sharerich_custom_' . $service_name);
+    }
+    else {
+      $content = sharerich_load_service($service_name);
+    }
+  }
+
+  $items = array();
+  $services = variable_get('sharerich_services', $defaults);
+  foreach ($services as $key => $value) {
+    if ($value) {
+      // Allow other modules to alter the buttons markup.
+      drupal_alter('sharerich_buttons', $buttons);
+
+      $items[] = array(
+        'data' => $buttons[$value],
+        'class' => array($key),
+      );
+    }
+    else {
+      continue;
+    }
+  }
+  $attributes = array(
+    'class' => array('sharerich-buttons', 'clearfix'),
+  );
+  return theme_item_list(array('items' => $items, 'title' => '', 'type' => 'ul', 'attributes' => $attributes));
+}
