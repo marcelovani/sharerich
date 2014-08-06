@@ -1,0 +1,29 @@
+<?php
+/**
+ * @file
+ * Install hooks for Sharerich project.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function sharerich_install() {
+
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function sharerich_uninstall() {
+  variable_delete('sharerich_services');
+  variable_delete('sharerich_youtube_username');
+  variable_delete('sharerich_github_username');
+  variable_delete('sharerich_facebook_app_id');
+  variable_delete('sharerich_services');
+  variable_delete('sharerich_facebook_site_url');
+
+  foreach (node_type_get_types() as $node) {
+    variable_delete('sharerich_node_' . $node->type);
+  }
+}
+
