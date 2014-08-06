@@ -21,3 +21,16 @@ function sharerich_menu() {
   return $items;
 }
 
+/**
+ * Implements hook_permission().
+ */
+function sharerich_permission() {
+  return array(
+    'administer sharerich' => array(
+      'title' => t('Administer Sharerich'),
+      'description' => t('Permission to allow user to configure Sharerich.'),
+      'restrict access' => TRUE,
+    ),
+  );
+}
+
