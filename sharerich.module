@@ -221,4 +221,63 @@ function sharerich_field_extra_fields() {
   return $extra;
 }
 
+/**
+ * Implements hook_token_info().
+ */
+function sharerich_token_info() {
+  $type = array(
+    'name' => t('Sharerich Tokens'),
+    'description' => t('Tokens used to create the share buttons.'),
+  );
+
+  $token['fb_app_id'] = array(
+    'name' => t('Facebook App Id'),
+    'description' => t("The App Id used to display the share box."),
+  );
+  $token['fb_site_url'] = array(
+    'name' => t("Facebook site Url"),
+    'description' => t("The Url used to display the share box."),
+  );
+  $token['youtube_username'] = array(
+    'name' => t("Youtube Username"),
+    'description' => t("Used to display the share box."),
+  );
+  $token['github_username'] = array(
+    'name' => t("Github Username"),
+    'description' => t("Used to display the share box."),
+  );
+
+  return array(
+    'types' => array('sharerich' => $type),
+    'tokens' => array('sharerich' => $token),
+  );
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function sharerich_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+
+  if ($type == 'sharerich') {
+    foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'fb_app_id':
+          $replacements[$original] = check_plain(variable_get('sharerich_facebook_app_id'));
+          break;
+        case 'fb_site_url':
+          $replacements[$original] = check_plain(variable_get('sharerich_facebook_site_url'));
+          break;
+        case 'youtube_username':
+          $replacements[$original] = check_plain(variable_get('sharerich_youtube_username'));
+          break;
+        case 'github_username':
+          $replacements[$original] = check_plain(variable_get('sharerich_github_username'));
+          break;
+      }
+    }
+    return $replacements;
+  }
+}
+
 
