@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file
+ * Module file for Sharerich.
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function sharerich_menu() {
+  $items['admin/config/user-interface/sharerich'] = array(
+    'title' => 'Sharerich',
+    'description' => t('Configure the Sharerich to select which social buttons you would like to enable.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('sharerich_admin_form'),
+    'access callback' => 'user_access',
+    'access arguments' => array('administer sharerich'),
+    'file' => 'sharerich.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  return $items;
+}
+
