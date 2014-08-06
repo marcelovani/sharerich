@@ -18,17 +18,21 @@ function sharerich_install() {
  * Implements hook_uninstall().
  */
 function sharerich_uninstall() {
-  variable_delete('sharerich_services');
-  variable_delete('sharerich_youtube_username');
-  variable_delete('sharerich_github_username');
-  variable_delete('sharerich_facebook_app_id');
-  variable_delete('sharerich_services');
-  variable_delete('sharerich_facebook_site_url');
-  variable_delete('sharerich_add_js');
-  variable_delete('sharerich_add_css');
-
+  // Clean entity configurations.
   foreach (node_type_get_types() as $node) {
-    variable_delete('sharerich_node_' . $node->type);
+    variable_del('sharerich_node_' . $node->type);
   }
+  // Clean service configurations.
+  foreach (variable_get('sharerich_services') as $service_name) {
+    variable_del('sharerich_node_' . $service_name);
+  }
+  // Clean all the rest.
+  variable_del('sharerich_services');
+  variable_del('sharerich_youtube_username');
+  variable_del('sharerich_github_username');
+  variable_del('sharerich_facebook_app_id');
+  variable_del('sharerich_services');
+  variable_del('sharerich_facebook_site_url');
+  variable_del('sharerich_add_js');
+  variable_del('sharerich_add_css');
 }
-
