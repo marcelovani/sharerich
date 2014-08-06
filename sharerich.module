@@ -72,9 +72,12 @@ function sharerich_get_buttons() {
     else {
       $content = sharerich_load_service($service_name);
     }
+    // Tokens replacement.
+    $buttons[$service_name] = token_replace($content, array($node));
   }
 
   $items = array();
+  $defaults = array('email', 'facebook', 'linkedin', 'twitter', 'googleplus', 'pinterest');
   $services = variable_get('sharerich_services', $defaults);
   foreach ($services as $key => $value) {
     if ($value) {
@@ -90,6 +93,7 @@ function sharerich_get_buttons() {
       continue;
     }
   }
+
   $attributes = array(
     'class' => array('sharerich-buttons', 'clearfix'),
   );
