@@ -5,6 +5,28 @@
  */
 
 /**
+ * Implements hook_libraries_info().
+ */
+function sharerich_libraries_info() {
+  return array(
+    'rrssb' => array(
+      'title' => 'Ridiculously Responsive Social Share Buttons',
+      'vendor url' => 'http://kurtnoble.com/labs/rrssb/',
+      'download url' => 'https://github.com/kni-labs/rrssb',
+      'path' => '/',
+      'files' => array(
+        'js' => array(
+          'js/rssb.min.js',
+        ),
+        'css' => array(
+          'css/rrssb.css',
+        ),
+      ),
+    ),
+  );
+}
+
+/**
  * Implements hook_menu().
  */
 function sharerich_menu() {
@@ -72,19 +94,20 @@ function sharerich_get_buttons() {
     $services = variable_get('sharerich_services', $defaults);
     foreach ($services as $service_name) {
       $content = sharerich_get_service_content($service_name);
-
-      // Allow other modules to alter the buttons markup.
-      drupal_alter('sharerich_buttons', $content);
-
-      // Tokens replacement.
-      $content = token_replace($content);
-
       if (!empty($content)) {
         $buttons[$service_name] = array(
           'data' => $content,
           'class' => array($service_name),
         );
       }
+    }
+
+    // Allow other modules to alter the buttons markup.
+    drupal_alter('sharerich_buttons', $buttons);
+
+    // Tokens replacement.
+    foreach ($buttons as $button) {
+      $button['data'] = token_replace($button['data']);
     }
   }
   $attributes = array(
@@ -96,8 +119,8 @@ function sharerich_get_buttons() {
 /**
  * Implements hook_sharerich_buttons_alter().
  */
-function sharerich_sharerich_buttons_alter($content) {
-  
+function sharerich_sharerich_buttons_alter($buttons) {
+
 }
 
 /**
