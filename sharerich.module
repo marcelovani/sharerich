@@ -103,6 +103,8 @@ function sharerich_get_buttons() {
 
     $title = t('Share');
 
+    $buttons = sharerich_reorder_buttons($buttons);
+
     // Allow other modules to alter the buttons markup.
     drupal_alter('sharerich_buttons', $buttons, $title);
 
@@ -355,4 +357,16 @@ function sharerich_page_build() {
       }
     }
   }
+}
+
+/**
+ * Helper to reorder buttons. This is temporary until we build drag and drop of services in the admin UI.
+ */
+function sharerich_reorder_buttons($buttons, $order = array('facebook', 'twitter', 'linkedin', 'email')) {
+  $tmp = array();
+  foreach ($order as $service_name) {
+    $tmp[$service_name] = $buttons[$service_name];
+    unset ($buttons[$service_name]);
+  }
+  return array_merge($tmp, $buttons);
 }

@@ -1,0 +1,54 @@
+Module: Sharerich
+
+Description
+===========
+Customisable Share buttons for social media.
+
+Dependencies
+jquery_update
+token
+
+Installation
+============
+Put the modules into your sites/module folder
+Enable the module and set user permissions
+
+Configuration
+=============
+Visit /admin/config/user-interface/sharerich
+or via menus: Administration > Configuration > User Interface > Sharerich
+
+Go to each content type and select the tab Sharerich to enable it.
+Go to each display of the content type and choose how to display the Sharerich field.
+
+Notes
+=====
+
+  - Facebook share:
+
+  It looks like Facebook is now ignoring any custom parameters on the share widget (https://developers.facebook.com/x/bugs/357750474364812/)
+  Since facebook.inc service uses www.facebook.com/sharer/sharer.php, it will pull the information from the Open graph tags of the Url being shared.
+  If you want to use custom information, you need to use the widget below. Please note that you will need to have a Facebook App Id and Site Url.
+
+  <a href="https://www.facebook.com/dialog/feed?redirect_uri=[sharerich:fb_site_url]&display=popup&app_id=[sharerich:fb_app_id]&link=[current-page:url]&name=[current-page:title]&description=[node:summary]" class="popup">
+    <span class="icon">
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
+            <path d="M27.825,4.783c0-2.427-2.182-4.608-4.608-4.608H4.783c-2.422,0-4.608,2.182-4.608,4.608v18.434
+                c0,2.427,2.181,4.608,4.608,4.608H14V17.379h-3.379v-4.608H14v-1.795c0-3.089,2.335-5.885,5.192-5.885h3.718v4.608h-3.726
+                c-0.408,0-0.884,0.492-0.884,1.236v1.836h4.609v4.608h-4.609v10.446h4.916c2.422,0,4.608-2.188,4.608-4.608V4.783z"/>
+        </svg>
+    </span>
+    <span class="text">facebook</span>
+  </a>
+
+
+  - Reordering the buttons
+
+  There are plans to have drag and drop of services in the admin UI, allowing reordering. Meanwhile, if you want to reorder the buttons, you can use the
+  hook_sharerich_buttons_alter() on your module and add the following code:
+
+  hook_sharerich_buttons_alter(&$buttons, &$title) {
+    $order = array ('twitter', 'linkedin', 'email', 'facebook');
+    $buttons = sharerich_reorder_buttons($buttons, $order);
+  }
+

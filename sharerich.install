@@ -36,7 +36,6 @@ function sharerich_uninstall() {
   variable_del('sharerich_youtube_username');
   variable_del('sharerich_github_username');
   variable_del('sharerich_facebook_app_id');
-  variable_del('sharerich_services');
   variable_del('sharerich_facebook_site_url');
   variable_del('sharerich_add_js');
   variable_del('sharerich_add_css');

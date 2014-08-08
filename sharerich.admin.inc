@@ -96,7 +96,6 @@ function sharerich_admin_form() {
 
 function sharerich_admin_form_submit(&$form, $form_state) {
   $reset = FALSE;
-
   foreach ($form_state['values']['sharerich_services'] as $service_name) {
     // If the file is not stored in the variables, read the file, otherwise save the changes on existing variable.
     $var_name = 'sharerich_custom_' . $service_name;
@@ -110,4 +109,3 @@ function sharerich_admin_form_submit(&$form, $form_state) {
     }
   }
 }
-
