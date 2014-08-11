@@ -370,3 +370,21 @@ function sharerich_reorder_buttons($buttons, $order = array('facebook', 'twitter
   }
   return array_merge($tmp, $buttons);
 }
+
+/**
+ * Implements hook_google_analytics_et_api().
+ */
+function sharerich_google_analytics_et_api() {
+  $selectors = array(
+    array(
+      'event' => 'mousedown',
+      'selector' => '.sharerich-buttons li',
+      'category' => 'Share Button',
+      'action' => '!text',
+      'label' => '!currentPage',
+      'value' => 0,
+      'noninteraction' => FALSE,
+    ),
+  );
+  return $selectors;
+}

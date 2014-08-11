@@ -5,8 +5,11 @@ Description
 Customisable Share buttons for social media.
 
 Dependencies
-jquery_update
-token
+- jquery_update
+- token
+
+Supports
+- google_analytics_et (If the module is enabled, GA event tracking will be added to the share buttons)
 
 Installation
 ============
