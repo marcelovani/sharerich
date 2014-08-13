@@ -9,7 +9,7 @@
  */
 function sharerich_admin_form() {
   $dir = drupal_get_path('module', 'sharerich') . '/services';
-  $services = file_scan_directory($dir, '/.inc/', $options = array(), $depth = 0);
+  $services = file_scan_directory($dir, '/.inc/', array(), 0);
   foreach ($services as $key => $service) {
     $options[] = $service->name;
   }

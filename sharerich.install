@@ -8,7 +8,7 @@
  * Implements hook_install().
  */
 function sharerich_install() {
-  if ($library = libraries_load('rrssb')) {
+  if (libraries_load('rrssb')) {
     variable_set('sharerich_add_js', libraries_get_path('rrssb') . '/js/rrssb.min.js');
     variable_set('sharerich_add_css',
       libraries_get_path('rrssb') . '/css/rrssb.css' . PHP_EOL .
