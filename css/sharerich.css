@@ -1,6 +1,6 @@
 .item-list ul.sharerich-buttons {
-    padding:0;
-    margin:0
+    padding: 0;
+    margin: 0;
 }
 .item-list ul.sharerich-buttons li {
     float: left;
@@ -12,5 +12,6 @@
     padding: 7% 0% 7% 12%;
 }
 .item-list ul.sharerich-buttons li.small a {
-    padding:0
+    padding: 0;
 }
+
