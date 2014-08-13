@@ -266,7 +266,8 @@ function sharerich_node_view($node, $view_mode, $langcode) {
  * Implements hook_field_extra_fields().
  */
 function sharerich_field_extra_fields() {
-  foreach (node_type_get_types() as $node) {
+ $extra = array(); 
+ foreach (node_type_get_types() as $node) {
     if (variable_get('sharerich_node_' . $node->type, FALSE)) {
       $extra['node'][$node->type]['display'] = array(
         'sharerich' => array(
