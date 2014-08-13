@@ -8,7 +8,7 @@
  * Implements hook_form().
  */
 function sharerich_admin_form() {
-  $dir = drupal_get_path('module','sharerich') . '/services';
+  $dir = drupal_get_path('module', 'sharerich') . '/services';
   $services = file_scan_directory($dir, '/.inc/', $options = array(), $depth = 0);
   foreach ($services as $key => $service) {
     $options[] = $service->name;
@@ -94,12 +94,17 @@ function sharerich_admin_form() {
   return system_settings_form($form);
 }
 
+/**
+ * Implements sharerich_admin_form_submit().
+ */
 function sharerich_admin_form_submit(&$form, $form_state) {
   $reset = FALSE;
   foreach ($form_state['values']['sharerich_services'] as $service_name) {
-    // If the file is not stored in the variables, read the file, otherwise save the changes on existing variable.
+    // If the file is not stored in the variables, read the file, otherwise
+    // save the changes on existing variable.
     $var_name = 'sharerich_custom_' . $service_name;
-    if (empty(variable_get($var_name, '')) || $reset) {
+    $var_get = variable_get($var_name, '');
+    if (empty($var_get) || $reset) {
       variable_set($var_name, sharerich_load_service($service_name));
     }
     else {
