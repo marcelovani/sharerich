@@ -16,6 +16,16 @@ Installation
 Put the modules into your sites/module folder
 Enable the module and set user permissions
 
+Make sure rrssb is in the libraries folder.
+If you use drush and make files, it should clone it automatically into /libraries/rrssb
+
+Or if you want to do it manually:
+Open a terminal window and go to your drupal/sites/all folder
+
+$ git clone https://github.com/kni-labs/rrssb libraries/rrssb
+
+Now you can enable Sharerich.
+
 Configuration
 =============
 Visit /admin/config/user-interface/sharerich
