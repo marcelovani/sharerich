@@ -4,4 +4,3 @@ core = 7.x
 package = Sharing
 dependencies[] = libraries
 dependencies[] = token
-files[] = includes/sharerich.field_collection.inc
