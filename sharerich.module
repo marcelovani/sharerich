@@ -101,8 +101,6 @@ function sharerich_get_buttons() {
       }
     }
 
-    $title = t('Share');
-
     $buttons = sharerich_reorder_buttons($buttons);
 
     // Allow other modules to alter the buttons markup.
@@ -113,9 +111,12 @@ function sharerich_get_buttons() {
       $buttons[$key]['data'] = token_replace($button['data']);
     }
   }
+
+  $title = t('Share');
   $attributes = array(
     'class' => array('sharerich-buttons', 'rrssb-buttons', 'clearfix'),
   );
+
   if (count($buttons) > 0) {
     return theme('item_list', array(
       'items' => $buttons,
