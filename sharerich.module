@@ -63,6 +63,7 @@ function sharerich_permission() {
 function sharerich_block_info() {
   $blocks['sharerich'] = array(
     'info' => t('Sharerich'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
   );
 
   return $blocks;
@@ -75,7 +76,7 @@ function sharerich_block_view($delta = '') {
   $block = array();
   switch ($delta) {
     case 'sharerich':
-      $block['subject'] = t('Share this');
+      $block['subject'] = '';
       $block['content'] = array(
         '#markup' => sharerich_get_buttons(),
       );
@@ -88,6 +89,8 @@ function sharerich_block_view($delta = '') {
  */
 function sharerich_get_buttons() {
   $buttons = &drupal_static(__FUNCTION__, array());
+
+  $title = t('Share this');
 
   if (empty($buttons)) {
     $services = sharerich_get_services();
@@ -112,7 +115,6 @@ function sharerich_get_buttons() {
     }
   }
 
-  $title = t('Share');
   $attributes = array(
     'class' => array('sharerich-buttons', 'rrssb-buttons', 'clearfix'),
   );
@@ -130,7 +132,7 @@ function sharerich_get_buttons() {
 /**
  * Implements hook_sharerich_buttons_alter().
  */
-function sharerich_sharerich_buttons_alter(&$buttons, &$title) {
+function hook_sharerich_buttons_alter(&$buttons, &$title) {
 
 }
 
