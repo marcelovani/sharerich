@@ -76,10 +76,10 @@ function sharerich_block_view($delta = '') {
   $block = array();
   switch ($delta) {
     case 'sharerich':
-      $block['subject'] = '';
       $block['content'] = array(
         '#markup' => sharerich_get_buttons(),
       );
+      $block['subject'] = _sharerich_block_title();
   }
   return $block;
 }
@@ -89,8 +89,6 @@ function sharerich_block_view($delta = '') {
  */
 function sharerich_get_buttons() {
   $buttons = &drupal_static(__FUNCTION__, array());
-
-  $title = t('Share this');
 
   if (empty($buttons)) {
     $services = sharerich_get_services();
@@ -104,10 +102,14 @@ function sharerich_get_buttons() {
       }
     }
 
+    $title = t('Share this');
     $buttons = sharerich_reorder_buttons($buttons);
 
     // Allow other modules to alter the buttons markup.
     drupal_alter('sharerich_buttons', $buttons, $title);
+
+    // Store the title.
+    _sharerich_block_title($title);
 
     // Tokens replacement.
     foreach ($buttons as $key => $button) {
@@ -122,11 +124,24 @@ function sharerich_get_buttons() {
   if (count($buttons) > 0) {
     return theme('item_list', array(
       'items' => $buttons,
-      'title' => $title,
+      'title' => '',
       'type' => 'ul',
       'attributes' => $attributes,
     ));
   }
+}
+
+/**
+ * Helper to statically store the block title.
+ */
+function _sharerich_block_title($new_title = NULL) {
+  $title = &drupal_static(__FUNCTION__, array());
+
+  if (empty($title) && !is_null($new_title)) {
+    $title = $new_title;
+  }
+
+  return $title;
 }
 
 /**
