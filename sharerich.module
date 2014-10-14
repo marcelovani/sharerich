@@ -56,6 +56,22 @@ function sharerich_permission() {
   );
 }
 
+/**
+ * Implements hook_theme().
+ */
+function sharerich_theme() {
+  return array(
+    'sharerich_buttons' => array(
+      'variables' => array(
+        'title' => '',
+        'item_list' => array(),
+        'attributes' => array(),
+      ),
+      'path' => drupal_get_path('module', 'sharerich') . '/theme',
+      'template' => 'sharerich-buttons',
+    ),
+  );
+}
 
 /**
  * Implements hook_block_info().
@@ -76,10 +92,7 @@ function sharerich_block_view($delta = '') {
   $block = array();
   switch ($delta) {
     case 'sharerich':
-      $block['content'] = array(
-        '#markup' => sharerich_get_buttons(),
-      );
-      $block['subject'] = _sharerich_block_title();
+      $block['content'] = sharerich_get_buttons();
   }
   return $block;
 }
@@ -102,14 +115,10 @@ function sharerich_get_buttons() {
       }
     }
 
-    $title = t('Share this');
     $buttons = sharerich_reorder_buttons($buttons);
 
     // Allow other modules to alter the buttons markup.
-    drupal_alter('sharerich_buttons', $buttons, $title);
-
-    // Store the title.
-    _sharerich_block_title($title);
+    drupal_alter('sharerich_buttons', $buttons);
 
     // Tokens replacement.
     foreach ($buttons as $key => $button) {
@@ -122,32 +131,33 @@ function sharerich_get_buttons() {
   );
 
   if (count($buttons) > 0) {
-    return theme('item_list', array(
-      'items' => $buttons,
-      'title' => '',
-      'type' => 'ul',
-      'attributes' => $attributes,
-    ));
+    // Create an item list for the button links.
+    $item_list = array(
+      '#theme' => 'item_list',
+      '#items' => $buttons,
+      '#type' => 'ul',
+      '#attributes' => $attributes,
+    );
+    // Output using the sharerich_buttons theme.
+    $sharerich_buttons = array(
+      '#theme' => 'sharerich_buttons',
+      '#item_list' => $item_list,
+      '#title' => 'Share this',
+    );
+    return $sharerich_buttons;
   }
 }
 
 /**
- * Helper to statically store the block title.
+ * Process the sharerich buttons.
  */
-function _sharerich_block_title($new_title = NULL) {
-  $title = &drupal_static(__FUNCTION__, array());
-
-  if (empty($title) && !is_null($new_title)) {
-    $title = $new_title;
-  }
-
-  return $title;
+function template_process_sharerich_buttons(&$vars){
 }
 
 /**
  * Implements hook_sharerich_buttons_alter().
  */
-function hook_sharerich_buttons_alter(&$buttons, &$title) {
+function hook_sharerich_buttons_alter(&$buttons) {
 
 }
 

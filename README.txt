@@ -60,7 +60,7 @@ Notes
   There are plans to have drag and drop of services in the admin UI, allowing reordering. Meanwhile, if you want to reorder the buttons, you can use the
   hook_sharerich_buttons_alter() on your module and add the following code:
 
-  hook_sharerich_buttons_alter(&$buttons, &$title) {
+  hook_sharerich_buttons_alter(&$buttons) {
     $order = array ('twitter', 'linkedin', 'email', 'facebook');
     $buttons = sharerich_reorder_buttons($buttons, $order);
   }
