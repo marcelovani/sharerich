@@ -13,6 +13,12 @@ function sharerich_admin_form() {
   foreach ($services as $key => $service) {
     $options[] = $service->name;
   }
+  $form['sharerich_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title'),
+    '#description' => t('This is the title that appears above the share buttons.'),
+    '#default_value' => variable_get('sharerich_title', t('Share This')),
+  );
   $form['sharerich_services'] = array(
     '#type' => 'checkboxes',
     '#title' => t('Available Services.'),

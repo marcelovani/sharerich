@@ -146,7 +146,7 @@ function sharerich_get_buttons($node = NULL) {
     $sharerich_buttons = array(
       '#theme' => 'sharerich_buttons',
       '#item_list' => $item_list,
-      '#title' => 'Share this',
+      '#title' => variable_get('sharerich_title', t('Share This')),
     );
     return $sharerich_buttons;
   }
