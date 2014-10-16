@@ -1,4 +1,4 @@
-<a href="https://www.facebook.com/sharer/sharer.php?u=[current-page:url]" class="popup">
+<a href="https://www.facebook.com/sharer/sharer.php?u=[sharerich:url]" class="popup">
   <span class="icon">
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
           <path d="M27.825,4.783c0-2.427-2.182-4.608-4.608-4.608H4.783c-2.422,0-4.608,2.182-4.608,4.608v18.434

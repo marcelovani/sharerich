@@ -43,7 +43,7 @@ Notes
   Since facebook.inc service uses www.facebook.com/sharer/sharer.php, it will pull the information from the Open graph tags of the Url being shared.
   If you want to use custom information, you need to use the widget below. Please note that you will need to have a Facebook App Id and Site Url.
 
-  <a href="https://www.facebook.com/dialog/feed?redirect_uri=[sharerich:fb_site_url]&display=popup&app_id=[sharerich:fb_app_id]&link=[current-page:url]&name=[current-page:title]&description=[node:summary]" class="popup">
+  <a href="https://www.facebook.com/dialog/feed?redirect_uri=[sharerich:fb_site_url]&display=popup&app_id=[sharerich:fb_app_id]&link=[sharerich:url]&name=[sharerich:title]&description=[sharerich:summary]" class="popup">
     <span class="icon">
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
             <path d="M27.825,4.783c0-2.427-2.182-4.608-4.608-4.608H4.783c-2.422,0-4.608,2.182-4.608,4.608v18.434

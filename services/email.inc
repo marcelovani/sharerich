@@ -1,4 +1,4 @@
-<a href="mailto:?subject=[current-page:title]&amp;body=[current-page:url]" class="nopopup">
+<a href="mailto:?subject=[sharerich:title]&amp;body=[sharerich:url]" class="nopopup">
   <span class="icon">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
            version="1.1" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28"
