@@ -1,4 +1,4 @@
-<a href="http://pinterest.com/pin/create/button/?url=[sharerich:url]&amp;media=http://kurtnoble.com/labs/sharerich/media/facebook-share.jpg&amp;description=[sharerich:title]" class="popup">
+<a href="http://pinterest.com/pin/create/button/?url=[sharerich:url]&amp;description=[sharerich:title]" class="popup">
   <span class="icon">
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
       <path d="M14.021,1.57C6.96,1.57,1.236,7.293,1.236,14.355c0,7.062,5.724,12.785,12.785,12.785c7.061,0,12.785-5.725,12.785-12.785
