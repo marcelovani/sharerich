@@ -2,5 +2,6 @@ name = Sharerich
 description = Provides an Extra field for Custom Share Buttons.
 core = 7.x
 package = Sharing
+dependencies[] = ctools
 dependencies[] = libraries
 dependencies[] = token
