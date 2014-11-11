@@ -66,6 +66,13 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
     '#default_value' => !empty($item->title) ? $item->title : '',
   );
 
+  $form['main_widget_settings']['block'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Create a block for this buttons set'),
+    '#description' => '',
+    '#default_value' => $item->block,
+  );
+  
   // Use our dragable table theme function.
   $form['main_widget_settings']['services'] = array(
     '#theme' => 'sharerich_manage_services',
@@ -112,7 +119,7 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
       '#title' => t('Custom code for %name', array('%name' => $service_name)),
       '#description' => '',
       '#default_value' => sharerich_get_service_content($service_name, $item->machinename),
-        '#states' => array(
+      '#states' => array(
         'invisible' => array(
           ':input[name="services[sharerich_' . $service_name . '][enabled]"]' => array('checked' => FALSE),
         ),

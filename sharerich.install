@@ -46,6 +46,11 @@ function sharerich_schema() {
         'default' => '',
         'description' => "The title that appears above the share buttons.",
       ),
+      'block' => array(
+        'type' => 'int',
+        'default' => 0,
+        'description' => 'If true, a block will be created in which to display this buttons set.',
+      ),
       'services' => array(
         'type' => 'blob',
         'size' => 'big',
@@ -76,26 +81,20 @@ function sharerich_install() {
 
 /**
  * Implements hook_uninstall().
- * 
- * @todo Re-think.
  */
 function sharerich_uninstall() {
-  module_load_include('module', 'sharerich');
 
   // Clean entity configurations.
   foreach (node_type_get_types() as $node) {
     variable_del('sharerich_node_' . $node->type);
   }
-  // Clean service configurations.
-//  foreach (sharerich_get_services() as $service_name) {
-//    variable_del('sharerich_node_' . $service_name);
-//  }
+
   // Clean all the rest.
-  variable_del('sharerich_services');
   variable_del('sharerich_youtube_username');
   variable_del('sharerich_github_username');
   variable_del('sharerich_facebook_app_id');
   variable_del('sharerich_facebook_site_url');
   variable_del('sharerich_add_js');
   variable_del('sharerich_add_css');
+  variable_del('sharerich_block_hashes');
 }
