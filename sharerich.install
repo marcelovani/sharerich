@@ -84,6 +84,8 @@ function sharerich_install() {
  */
 function sharerich_uninstall() {
 
+  drupal_uninstall_schema('sharerich_widgets');
+
   // Clean entity configurations.
   foreach (node_type_get_types() as $node) {
     variable_del('sharerich_node_' . $node->type);
