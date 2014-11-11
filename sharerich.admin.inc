@@ -8,37 +8,6 @@
  * Implements hook_form().
  */
 function sharerich_admin_form() {
-//  $dir = drupal_get_path('module', 'sharerich') . '/services';
-//  $services = file_scan_directory($dir, '/.inc/', array(), 0);
-//  foreach ($services as $key => $service) {
-//    $options[] = $service->name;
-//  }
-//  $form['sharerich_title'] = array(
-//    '#type' => 'textfield',
-//    '#title' => t('Title'),
-//    '#description' => t('This is the title that appears above the share buttons.'),
-//    '#default_value' => variable_get('sharerich_title', t('Share This')),
-//  );
-//  $form['sharerich_services'] = array(
-//    '#type' => 'checkboxes',
-//    '#title' => t('Available Services.'),
-//    '#options' => drupal_map_assoc($options),
-//    '#default_value' => sharerich_get_services(),
-//  );
-//  foreach ($options as $key => $service_name) {
-//    $var_name = 'sharerich_custom_' . $service_name;
-//    $form[$var_name] = array(
-//      '#type' => 'textarea',
-//      '#title' => t('Custom code for %name', array('%name' => $service_name)),
-//      '#description' => t('You can customize the code for this service.'),
-//      '#default_value' => sharerich_get_service_content($service_name),
-//      '#states' => array(
-//        'invisible' => array(
-//          ':input[name="sharerich_services[' . $service_name . ']"]' => array('checked' => FALSE),
-//        ),
-//      ),
-//    );
-//  }
   $form['sharerich_facebook_app_id'] = array(
     '#type' => 'textfield',
     '#title' => t('Facebook App ID'),
@@ -99,26 +68,3 @@ function sharerich_admin_form() {
 
   return system_settings_form($form);
 }
-
-/**
- * !!! @todo Move the logic to CTools export.
- * 
- * Implements sharerich_admin_form_submit().
- */
-//function sharerich_admin_form_submit(&$form, $form_state) {
-//  $reset = FALSE;
-//  foreach ($form_state['values']['sharerich_services'] as $service_name) {
-//    // If the file is not stored in the variables, read the file, otherwise
-//    // save the changes on existing variable.
-//    $var_name = 'sharerich_custom_' . $service_name;
-//    $var_get = variable_get($var_name, '');
-//    if (empty($var_get) || $reset) {
-//      variable_set($var_name, sharerich_load_service($service_name));
-//    }
-//    else {
-//      if (isset($form_state['values']['sharerich_custom_' . $service_name])) {
-//        variable_set($var_name, $form_state['values']['sharerich_custom_' . $service_name]);
-//      }
-//    }
-//  }
-//}

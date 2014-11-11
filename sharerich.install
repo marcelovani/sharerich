@@ -76,6 +76,8 @@ function sharerich_install() {
 
 /**
  * Implements hook_uninstall().
+ * 
+ * @todo Re-think.
  */
 function sharerich_uninstall() {
   module_load_include('module', 'sharerich');
@@ -85,9 +87,9 @@ function sharerich_uninstall() {
     variable_del('sharerich_node_' . $node->type);
   }
   // Clean service configurations.
-  foreach (sharerich_get_services() as $service_name) {
-    variable_del('sharerich_node_' . $service_name);
-  }
+//  foreach (sharerich_get_services() as $service_name) {
+//    variable_del('sharerich_node_' . $service_name);
+//  }
   // Clean all the rest.
   variable_del('sharerich_services');
   variable_del('sharerich_youtube_username');

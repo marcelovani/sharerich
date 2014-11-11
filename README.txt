@@ -5,6 +5,7 @@ Description
 Customisable Share buttons for social media.
 
 Dependencies
+- ctools
 - token
 - libraries
 
@@ -28,11 +29,10 @@ Now you can enable Sharerich.
 
 Configuration
 =============
-Visit /admin/config/user-interface/sharerich
-or via menus: Administration > Configuration > User Interface > Sharerich
-
-Go to each content type and select the tab Sharerich to enable it.
-Go to each display of the content type and choose how to display the Sharerich field.
+- Visit /admin/structure/sharerich/settings for general settings;
+- Visit /admin/structure/sharerich and create your own buttons set;
+- Go to each content type and select the tab Sharerich to enable it;
+- Go to each display of the content type and choose how to display the Sharerich field.
 
 Notes
 =====
@@ -55,13 +55,8 @@ Notes
   </a>
 
 
-  - Reordering the buttons
-
-  There are plans to have drag and drop of services in the admin UI, allowing reordering. Meanwhile, if you want to reorder the buttons, you can use the
-  hook_sharerich_buttons_alter() on your module and add the following code:
+  - To alter the buttons markup.
 
   hook_sharerich_buttons_alter(&$buttons) {
-    $order = array ('twitter', 'linkedin', 'email', 'facebook');
-    $buttons = sharerich_reorder_buttons($buttons, $order);
-  }
 
+  }
