@@ -84,12 +84,14 @@ function sharerich_install() {
  */
 function sharerich_uninstall() {
 
-  drupal_uninstall_schema('sharerich_widgets');
+  drupal_uninstall_schema('sharerich');
 
   // Clean entity configurations.
   foreach (node_type_get_types() as $node) {
     variable_del('sharerich_node_' . $node->type);
   }
+
+  //@TODO remove variables sharerich_custom_ + service_name
 
   // Clean all the rest.
   variable_del('sharerich_youtube_username');
@@ -99,4 +101,48 @@ function sharerich_uninstall() {
   variable_del('sharerich_add_js');
   variable_del('sharerich_add_css');
   variable_del('sharerich_block_hashes');
+}
+
+/**
+ * Sharerich 2.x upgrade.
+ */
+function sharerich_update_7001() {
+  // Install schema.
+  drupal_install_schema('sharerich');
+
+  // Convert global widgets into new ctools storage.
+  // Create a new object.
+  $imported = (ctools_export_crud_new('sharerich_widgets'));
+  $imported->machinename = 'imported_widget';
+  $imported->title = t('Share This');
+  $imported->block = TRUE;
+
+  // Port legacy services.
+  $services = variable_get('sharerich_services', array());
+  foreach ($services as $service_name => $value) {
+    $key = 'sharerich_' . $service_name;
+    $imported->services[$key]['enabled'] = ($service_name === $value) ? TRUE : FALSE;
+    //@TODO Import custom widgets saved on variable sharerich_custom_ + service_name.
+    $imported->services[$key]['markup'] = sharerich_get_service_content($service_name);
+    $imported->services[$key]['weight'] = 0;
+  }
+
+  // Save configuration.
+  ctools_export_crud_save('sharerich_widgets', $imported);
+
+  // Set default widget for each content type that has Sharerich enabled.
+  foreach (node_type_get_types() as $node) {
+    if (variable_get('sharerich_node_' . $node->type, FALSE)) {
+      $config = field_bundle_settings('node', $node->type);
+      $display = &$config['extra_fields']['display']['sharerich'];
+      foreach ($display as $display_name => $item) {
+        //@TODO sharerich_widgets is a bad name for a machine name setting.
+        $display[$display_name]['settings']['sharerich_widgets'] = 'imported_widget';
+      }
+      // Save extra field config.
+      field_bundle_settings('node', $node->type, $config);
+    }
+  }
+
+  //@TODO remove variables sharerich_custom_ + service_name.
 }

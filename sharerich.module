@@ -387,6 +387,7 @@ function sharerich_field_extra_fields($get_defaults = FALSE) {
  * Implements hook_page_build().
  */
 function sharerich_page_build() {
+
   if (path_is_admin(current_path())) {
     return;
   }
