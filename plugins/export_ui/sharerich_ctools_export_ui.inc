@@ -81,30 +81,27 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
 
   foreach ($options as $service_name) {
 
-    // Unique identifier for the service.
-    $service_identifier = 'sharerich_' . $service_name;
-
-    $form['main_widget_settings']['services'][$service_identifier]['service'] = array(
+    $form['main_widget_settings']['services'][$service_name]['service'] = array(
       '#markup' => $service_name,
     );
 
-    $form['main_widget_settings']['services'][$service_identifier]['enabled'] = array(
+    $form['main_widget_settings']['services'][$service_name]['enabled'] = array(
       '#type' => 'checkbox',
-      '#default_value' => $item->services[$service_identifier]['enabled'],
+      '#default_value' => $item->services[$service_name]['enabled'],
     );
 
     // Store the buttons markup along other data.
-    $form['main_widget_settings']['services'][$service_identifier]['markup'] = array(
+    $form['main_widget_settings']['services'][$service_name]['markup'] = array(
       '#type' => 'hidden',
       '#value' => sharerich_get_service_content($service_name, $item->machinename),
     );
 
     // The field contains sort info (weights).
-    $form['main_widget_settings']['services'][$service_identifier]['weight'] = array(
+    $form['main_widget_settings']['services'][$service_name]['weight'] = array(
       '#type' => 'weight',
       '#title' => t('Weight'),
       '#title_display' => 'invisible',
-      '#default_value' => $item->services[$service_identifier]['weight'],
+      '#default_value' => $item->services[$service_name]['weight'],
     );
   }
 
@@ -121,7 +118,7 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
       '#default_value' => sharerich_get_service_content($service_name, $item->machinename),
       '#states' => array(
         'invisible' => array(
-          ':input[name="services[sharerich_' . $service_name . '][enabled]"]' => array('checked' => FALSE),
+          ':input[name="services[' . $service_name . '][enabled]"]' => array('checked' => FALSE),
         ),
       ),
     );
@@ -134,7 +131,7 @@ function sharerich_ctools_export_ui_form_submit(&$form, &$form_state) {
 
   // Rewrite the valuees from the custom service code (coming from default).
   foreach ($services_values as $key => &$service) {
-    $custom_key = str_replace('sharerich_', 'sharerich_custom_', $key);
+    $custom_key = 'sharerich_custom_' . $key;
 
     if (empty($form_state['values'][$custom_key])) {
       continue;

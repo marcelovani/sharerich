@@ -107,6 +107,8 @@ function sharerich_uninstall() {
  * Sharerich 2.x upgrade.
  */
 function sharerich_update_7001() {
+  module_load_include('inc', 'ctools', 'includes/export');
+
   // Install schema.
   drupal_install_schema('sharerich');
 
@@ -120,11 +122,10 @@ function sharerich_update_7001() {
   // Port legacy services.
   $services = variable_get('sharerich_services', array());
   foreach ($services as $service_name => $value) {
-    $key = 'sharerich_' . $service_name;
-    $imported->services[$key]['enabled'] = ($service_name === $value) ? TRUE : FALSE;
+    $imported->services[$service_name]['enabled'] = ($service_name === $value) ? TRUE : FALSE;
     //@TODO Import custom widgets saved on variable sharerich_custom_ + service_name.
-    $imported->services[$key]['markup'] = sharerich_get_service_content($service_name);
-    $imported->services[$key]['weight'] = 0;
+    $imported->services[$service_name]['markup'] = sharerich_get_service_content($service_name);
+    $imported->services[$service_name]['weight'] = 0;
   }
 
   // Save configuration.
@@ -144,5 +145,6 @@ function sharerich_update_7001() {
     }
   }
 
+  field_info_cache_clear();
   //@TODO remove variables sharerich_custom_ + service_name.
 }

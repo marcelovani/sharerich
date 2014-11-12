@@ -245,10 +245,9 @@ function sharerich_load_service($service_name) {
 function sharerich_get_service_content($service_name, $widget_name = '') {
 
   $sharerich_widget = sharerich_widget_load($widget_name);
-  $service_identifier = 'sharerich_' . $service_name;
 
-  if (!empty($sharerich_widget->services[$service_identifier]['markup'])) {
-    return $sharerich_widget->services[$service_identifier]['markup'];
+  if (!empty($sharerich_widget->services[$service_name]['markup'])) {
+    return $sharerich_widget->services[$service_name]['markup'];
   }
 
   // On new widget creation.
