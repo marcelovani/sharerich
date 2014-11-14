@@ -12,7 +12,7 @@ require_once('includes/sharerich.tokens.inc');
  * Tell CTools that we support the default_mymodule_presets API.
  */
 function sharerich_ctools_plugin_api($owner, $api) {
-  if ($owner == 'mymodule' && $api == 'default_sharerich_widgets') {
+  if ($owner == 'sharerich' && $api == 'sharerich_sets') {
     return array('version' => 1);
   }
 }
@@ -58,7 +58,7 @@ function sharerich_menu() {
   $items['admin/structure/sharerich/settings'] = array(
     'title' => 'Global Sharerich Settings',
     'type' => MENU_LOCAL_TASK,
-    'description' => "Configure your site-wide Sharerich settings.",
+    'description' => "Configure your sitewide Sharerich settings.",
     'page callback' => 'drupal_get_form',
     'page arguments' => array('sharerich_admin_form'),
     'access arguments' => array('administer sharerich'),
@@ -107,26 +107,26 @@ function sharerich_theme() {
  */
 function sharerich_block_info() {
 
-  $widgets = sharerich_widget_load_all();
+  $sharerich_sets = sharerich_sets_load_all();
   $blocks = array();
   $hashes = array();
 
-  foreach ($widgets as $widget) {
-    if (!$widget->block) {
+  foreach ($sharerich_sets as $sharerich_set) {
+    if (!$sharerich_set->block) {
       continue;
     }
-    // Inspired from dfp module.
-    // The block table chokes when the delta is more than 32 characters. To
-    // solve this we create a hash of the machine name when needed.
-    if (drupal_strlen($widget->machinename) >= 32) {
-      $delta = md5($widget->machinename);
-      $hashes[$delta] = $widget->machinename;
+    // Create a hash when the machine name is too big.
+    if (drupal_strlen($sharerich_set->machinename) >= 32) {
+      $delta = md5($sharerich_set->machinename);
+      $hashes[$delta] = $sharerich_set->machinename;
     }
     else {
-      $delta = $widget->machinename;
+      $delta = $sharerich_set->machinename;
     }
 
-    $blocks[$delta]['info'] = t('Sharerich widget: @name', array('@name' => $widget->machinename));
+    $blocks[$delta]['info'] = t('Sharerich set: @name',
+      array('@name' => $sharerich_set->machinename)
+    );
     $blocks[$delta]['cache'] = DRUPAL_CACHE_PER_PAGE;
   }
 
@@ -153,8 +153,8 @@ function sharerich_block_view($delta = '') {
     }
   }
 
-  $widget = sharerich_widget_load($delta);
-  $block['content'] = sharerich_get_buttons($widget, NULL);
+  $sharerich_set = sharerich_set_load($delta);
+  $block['content'] = sharerich_get_buttons($sharerich_set, NULL);
 
   return $block;
 }
@@ -162,18 +162,18 @@ function sharerich_block_view($delta = '') {
 /**
  * Returns markup with list of share buttons.
  */
-function sharerich_get_buttons($sharerich_widget, $node = NULL) {
+function sharerich_get_buttons($sharerich_set, $node = NULL) {
   // Create a unique $key in order to render all the whims.
   if (!is_null($node)) {
     $key = $node->nid;
   }
   else {
-    $key = $sharerich_widget->machinename;
+    $key = $sharerich_set->machinename;
   }
 
   $buttons = &drupal_static(__FUNCTION__ . $key, array());
-  if (empty($buttons) && !empty($sharerich_widget->services)) {
-    foreach ($sharerich_widget->services as $service_name => $service) {
+  if (empty($buttons) && !empty($sharerich_set->services)) {
+    foreach ($sharerich_set->services as $service_name => $service) {
       if (empty($service['enabled'])) {
         continue;
       }
@@ -207,7 +207,7 @@ function sharerich_get_buttons($sharerich_widget, $node = NULL) {
     $sharerich_buttons = array(
       '#theme' => 'sharerich_buttons',
       '#item_list' => $item_list,
-      '#title' => !empty($sharerich_widget->title) ? $sharerich_widget->title : FALSE,
+      '#title' => !empty($sharerich_set->title) ? $sharerich_set->title : FALSE,
     );
     return $sharerich_buttons;
   }
@@ -242,15 +242,15 @@ function sharerich_load_service($service_name) {
 /**
  * Helper to get the service content from file or ctools object.
  */
-function sharerich_get_service_content($service_name, $widget_name = '') {
+function sharerich_get_service_content($service_name, $set_name = '') {
 
-  $sharerich_widget = sharerich_widget_load($widget_name);
+  $sharerich_set = sharerich_set_load($set_name);
 
-  if (!empty($sharerich_widget->services[$service_name]['markup'])) {
-    return $sharerich_widget->services[$service_name]['markup'];
+  if (!empty($sharerich_set->services[$service_name]['markup'])) {
+    return $sharerich_set->services[$service_name]['markup'];
   }
 
-  // On new widget creation.
+  // On new set creation.
   return sharerich_load_service($service_name);
 }
 
@@ -275,7 +275,7 @@ function sharerich_form_node_type_form_alter(&$form, &$form_state) {
     '#title' => t('Enable Sharerich for this content type.'),
     '#default_value' => variable_get('sharerich_node_' . $entity_type, FALSE),
     '#suffix' => t('After enabling Sharerich you need to configure each'
-      . ' display on Manage display tag.<br/>Widgets are located '
+      . ' display on Manage display set.<br/>Sets are located '
       . '<a href="@url">here</a>.', array(
       '@url' => url('admin/structure/sharerich/list')
       )
@@ -289,16 +289,17 @@ function sharerich_form_node_type_form_alter(&$form, &$form_state) {
  */
 function sharerich_node_type_callback(&$form, &$form_state) {
   $entity_type = $form['#node_type']->type;
-  $var_name = 'sharerich_node_' . $form_state['values']['type'];
-  $var_get = variable_get($var_name);
-  $form_value = $form_state['complete form']['sharerich']['show']['#value'];
+  $node_type = 'sharerich_node_' . $form_state['values']['type'];
+  $enabled_node_type = variable_get($var_name);
+  $show = $form_state['complete form']['sharerich']['show']['#value'];
   // When Sharerich is enabled for the first time on this content type,
   // redirect to the display settings.
-  if (empty($var_get) && $form_value == TRUE) {
+  if (empty($enabled_node_type) && $show == TRUE) {
     drupal_set_message(t('Please configure the field Sharerich for each Display.'));
     $form_state['redirect'] = 'admin/structure/types/manage/' . $entity_type . '/display';
   }
-  variable_set($var_name, $form_value);
+  variable_set($node_type, $show);
+  // Clear cache.
   field_info_cache_clear();
 }
 
@@ -315,31 +316,26 @@ function sharerich_node_view($node, $view_mode, $langcode) {
 
   $config = field_bundle_settings('node', $node->type);
 
-  // Check for widget setup.
-  if (empty($config['extra_fields']['display']['sharerich']['default']['settings']['sharerich_widgets'])) {
+  // Check for set setup.
+  if (empty($config['extra_fields']['display']['sharerich']['default']['settings']['sharerich_sets'])) {
     return;
   }
 
-  $sharerich_widget_machinename = $config['extra_fields']['display']['sharerich']['default']['settings']['sharerich_widgets'];
-  $sharerich_widget = sharerich_widget_load($sharerich_widget_machinename);
-
-  // Check for widget existence.
-  if (!$sharerich_widget) {
-    return;
-  }
-
-  foreach ($extra['node'][$node->type]['display'] as $field_name => $field_info) {
-    // Check to make sure this field is visible in this view mode.
-    $displays = &$config['extra_fields']['display'][$field_name];
-    if (isset($displays['default']) && !isset($displays['full'])) {
-      // Fallback for Default display when viewing full view node.
-      $displays['full'] = $displays['default'];
-    }
-    if (isset($displays[$view_mode]) && $displays[$view_mode]['visible'] == FALSE) {
-      continue;
-    }
-    if ($field_name == 'sharerich') {
-      $node->content['sharerich'] = sharerich_get_buttons($sharerich_widget, $node);
+  $sharerich_set_machinename = $config['extra_fields']['display']['sharerich']['default']['settings']['sharerich_sets'];
+  if ($sharerich_set = sharerich_set_load($sharerich_set_machinename)) {
+    foreach ($extra['node'][$node->type]['display'] as $field_name => $field_info) {
+      // Check to make sure this field is visible in this view mode.
+      $displays = &$config['extra_fields']['display'][$field_name];
+      if (isset($displays['default']) && !isset($displays['full'])) {
+        // Fallback for Default display when viewing full view node.
+        $displays['full'] = $displays['default'];
+      }
+      if (isset($displays[$view_mode]) && $displays[$view_mode]['visible'] == FALSE) {
+        continue;
+      }
+      if ($field_name == 'sharerich') {
+        $node->content['sharerich'] = sharerich_get_buttons($sharerich_set, $node);
+      }
     }
   }
 }
@@ -362,7 +358,7 @@ function sharerich_field_extra_fields($get_defaults = FALSE) {
         'weight' => 100,
         'visible' => TRUE,
         'settings' => array(
-          'sharerich_widgets' => 0,
+          'sharerich_sets' => 0,
         ),
       ),
     )
@@ -427,6 +423,7 @@ function sharerich_page_build() {
             }
           })
          }';
+
   drupal_add_js($js, array('type' => 'inline', 'scope' => 'header'));
 }
 
@@ -455,63 +452,64 @@ function sharerich_google_analytics_et_api() {
  *
  * @return object
  */
-function sharerich_widget_load($machinename) {
+function sharerich_set_load($machinename) {
 
   ctools_include('export');
 
-  $tags = &drupal_static(__FUNCTION__, array());
+  $sets = &drupal_static(__FUNCTION__, array());
 
-  if (!isset($tags[$machinename])) {
-    // Load the tag.
-    $result = ctools_export_load_object('sharerich_widgets', 'names', array($machinename));
+  if (!isset($sets[$machinename])) {
+    // Load the set.
+    $result = ctools_export_load_object('sharerich_sets', 'names', array($machinename));
     if (isset($result[$machinename])) {
-      $tag = $result[$machinename];
+      $set = $result[$machinename];
     }
     else {
       return NULL;
     }
 
-    // Store the original tag. This is used by the tag edit form.
-    $tag->raw = clone $tag;
+    // Store the original set. This is used by the set edit form.
+    $set->raw = clone $set;
 
-    // Allow modules to alter the raw tag object.
-    drupal_alter('sharerich_widget_load', $tag);
+    // Allow modules to alter the raw set object.
+    drupal_alter('sharerich_set_load', $set);
 
-    // Configure this tag based on the defined settings.
-    $tag->wrapper_id = 'sharerich-widget-' . $tag->machinename . '-wrapper';
-    $tag->placeholder_id = 'sharerich-widget-' . $tag->machinename;
-    // Allow modules to alter the fully-loaded tag object.
-    drupal_alter('sharerich_widget', $tag);
+    // Configure this set based on the defined settings.
+    $set->wrapper_id = 'sharerich-set-' . $set->machinename . '-wrapper';
+    $set->placeholder_id = 'sharerich-set-' . $set->machinename;
 
-    // Statically cache the fully loaded tag.
-    $tags[$machinename] = $tag;
+    // Allow modules to alter the fully-loaded set object.
+    drupal_alter('sharerich_set', $set);
+
+    // Statically cache the fully loaded set.
+    $sets[$machinename] = $set;
   }
   else {
-    // Use the statically cached tag object.
-    $tag = $tags[$machinename];
+    // Use the statically cached set object.
+    $set = $sets[$machinename];
   }
 
-  return $tag;
+  return $set;
 }
 
 /**
- * Load all sharerich widgets.
+ * Load all sharerich sets.
  *
  * @param boolean $include_disabled
  *
- * @return array of tags.
+ * @return array of sets.
  */
-function sharerich_widget_load_all($include_disabled = FALSE) {
+function sharerich_sets_load_all($include_disabled = FALSE) {
   ctools_include('export');
 
-  $tags = ctools_export_crud_load_all('sharerich_widgets');
-  foreach ($tags as $key => $tag) {
-    if (!$include_disabled && isset($tag->disabled) && $tag->disabled) {
-      unset($tags[$key]);
+  $sets = ctools_export_crud_load_all('sharerich_sets');
+  foreach ($sets as $key => $set) {
+    if (!$include_disabled && isset($set->disabled) && $set->disabled) {
+      unset($sets[$key]);
     }
   }
 
-  return $tags;
+  return $sets;
 }
 
 /**
@@ -618,12 +616,12 @@ function sharerich_field_formatter_settings_form($build, $summary = NULL) {
     $display = $display_defaults['extra_fields']['display']['sharerich'];
   }
 
-  $form['sharerich_widgets'] = array(
+  $form['sharerich_sets'] = array(
     '#type' => 'select',
-    '#title' => t('Sharerich widget'),
-    '#default_value' => !empty($display['settings']['sharerich_widgets']) ? $display['settings']['sharerich_widgets'] : '',
-    '#options' => _sharerich_get_widget_list(),
-    '#description' => t('Note: Disabled widgets are not listed.'),
+    '#title' => t('Sharerich set'),
+    '#default_value' => !empty($display['settings']['sharerich_sets']) ? $display['settings']['sharerich_sets'] : '',
+    '#options' => _sharerich_get_sets(),
+    '#description' => t('Note: Disabled sets are not listed.'),
   );
 
   return $form;
@@ -664,11 +662,11 @@ function sharerich_field_formatter_settings_summary($build, $summary = NULL) {
   }
 
   $summary = array();
-  if (!empty($display['settings']['sharerich_widgets'])) {
-    $summary[] = t('Sharerich widget') . ': ' . $display['settings']['sharerich_widgets'];
+  if (!empty($display['settings']['sharerich_sets'])) {
+    $summary[] = t('Sharerich set') . ': ' . $display['settings']['sharerich_sets'];
   }
   else {
-    $summary[] = t('No widget selected.');
+    $summary[] = t('No set selected.');
   }
 
 
@@ -676,14 +674,14 @@ function sharerich_field_formatter_settings_summary($build, $summary = NULL) {
 }
 
 /**
- * Helper function for grabbing Sharerich widget list.
+ * Helper function for grabbing Sharerich set list.
  */
-function _sharerich_get_widget_list() {
-  $widgets = &drupal_static(__FUNCTION__);
+function _sharerich_get_sets() {
+  $sharerich_sets = &drupal_static(__FUNCTION__);
 
-  if (!isset($widgets)) {
-    $widgets_all = sharerich_widget_load_all();
-    $widgets = !empty($widgets_all) ? drupal_map_assoc(array_keys($widgets_all)) : array(0 => 'None');
+  if (!isset($sharerich_sets)) {
+    $sharerich_sets = sharerich_sets_load_all();
+    $sharerich_sets = !empty($sharerich_sets) ? drupal_map_assoc(array_keys($sharerich_sets)) : array(0 => 'None');
   }
-  return $widgets;
+  return $sharerich_sets;
 }

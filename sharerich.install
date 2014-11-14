@@ -9,20 +9,20 @@
  * Implements hook_schema().
  */
 function sharerich_schema() {
-  $schema['sharerich_widgets'] = array(
-    'description' => 'Stores information about Sharerich Widget.',
+  $schema['sharerich_sets'] = array(
+    'description' => 'Stores Sharerich Sets.',
     'export' => array(
       'key' => 'machinename',
       'primary key' => 'swid',
-      'identifier' => 'sharerich_widget', // Exports will be available as $sharerich
-      'default hook' => 'default_sharerich_widget', // Function hook name.
+      'identifier' => 'sharerich_set', // Exports will be available as $sharerich
+      'default hook' => 'sharerich_set', // Function hook name.
       'api' => array(
         'owner' => 'sharerich',
-        'api' => 'default_sharerich_widgets', // Base name for api include files.
+        'api' => 'sharerich_sets', // Base name for api include files.
         'minimum_version' => 1,
         'current_version' => 1,
       ),
-      'load callback' => 'sharerich_widget_load',
+      'load callback' => 'sharerich_set_load',
     ),
     'fields' => array(
       'swid' => array(
@@ -37,7 +37,7 @@ function sharerich_schema() {
         'length' => 255,
         'not null' => TRUE,
         'default' => '',
-        'description' => "The widget's unique name.",
+        'description' => "The unique name.",
       ),
       'title' => array(
         'type' => 'varchar',
@@ -112,10 +112,10 @@ function sharerich_update_7001() {
   // Install schema.
   drupal_install_schema('sharerich');
 
-  // Convert global widgets into new ctools storage.
+  // Convert global sets into new ctools storage.
   // Create a new object.
-  $imported = (ctools_export_crud_new('sharerich_widgets'));
-  $imported->machinename = 'imported_widget';
+  $imported = (ctools_export_crud_new('sharerich_sets'));
+  $imported->machinename = 'imported_set';
   $imported->title = t('Share This');
   $imported->block = TRUE;
 
@@ -129,16 +129,15 @@ function sharerich_update_7001() {
   }
 
   // Save configuration.
-  ctools_export_crud_save('sharerich_widgets', $imported);
+  ctools_export_crud_save('sharerich_sets', $imported);
 
-  // Set default widget for each content type that has Sharerich enabled.
+  // Set default set for each content type that has Sharerich enabled.
   foreach (node_type_get_types() as $node) {
     if (variable_get('sharerich_node_' . $node->type, FALSE)) {
       $config = field_bundle_settings('node', $node->type);
       $display = &$config['extra_fields']['display']['sharerich'];
       foreach ($display as $display_name => $item) {
-        //@TODO sharerich_widgets is a bad name for a machine name setting.
-        $display[$display_name]['settings']['sharerich_widgets'] = 'imported_widget';
+        $display[$display_name]['settings']['sharerich_sets'] = 'imported_set';
       }
       // Save extra field config.
       field_bundle_settings('node', $node->type, $config);

@@ -5,19 +5,19 @@
  * A Ctools Export UI plugin for Sharerich.
  */
 $plugin = array(
-  'schema' => 'sharerich_widgets', // As defined in hook_schema().
+  'schema' => 'sharerich_sets', // As defined in hook_schema().
   'access' => 'administer sharerich', // Define a permission users must have to access these pages.
   // Define the menu item.
   'menu' => array(
     'menu item' => 'sharerich',
     'menu title' => 'Sharerich',
-    'menu description' => 'Administer Sharerich presets.',
+    'menu description' => 'Administer Sharerich sets.',
   ),
   // Define user interface texts.
-  'title singular' => t('widget'),
-  'title plural' => t('widgets'),
-  'title singular proper' => t('Sharerich widget'),
-  'title plural proper' => t('Sharerich widgets'),
+  'title singular' => t('set'),
+  'title plural' => t('sets'),
+  'title singular proper' => t('Sharerich set'),
+  'title plural proper' => t('Sharerich sets'),
   // Define the names of the functions that provide the add/edit forms.
   'form' => array(
     'settings' => 'sharerich_ctools_export_ui_form',
@@ -42,62 +42,62 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
     '#type' => 'vertical_tabs',
   );
 
-  $form['main_widget_settings'] = array(
+  $form['default_sets'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Main Widget Settings'),
+    '#title' => t('Default Sets'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#group' => 'settings',
   );
 
-  $form['custom_widget_settings'] = array(
+  $form['custom_sets'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Custom Widget Settings'),
+    '#title' => t('Custom Sets'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#group' => 'settings',
-    '#description' => '<strong>' . t('In order to edit the markup, you need to enable respective service in "Main Widget Settings".') . '</strong>',
+    '#description' => '<strong>' . t('In order to edit the markup, you need to enable the services in the "Default Sets tab".') . '</strong>',
   );
 
-  $form['main_widget_settings']['title'] = array(
+  $form['default_sets']['title'] = array(
     '#type' => 'textfield',
     '#title' => t('Title'),
     '#description' => t('This is the title that appears above the share buttons.'),
     '#default_value' => !empty($item->title) ? $item->title : '',
   );
 
-  $form['main_widget_settings']['block'] = array(
+  $form['default_sets']['block'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Create a block for this buttons set'),
+    '#title' => t('Create a block for this button set.'),
     '#description' => '',
     '#default_value' => $item->block,
   );
   
   // Use our dragable table theme function.
-  $form['main_widget_settings']['services'] = array(
+  $form['default_sets']['services'] = array(
     '#theme' => 'sharerich_manage_services',
     '#tree' => TRUE,
   );
 
   foreach ($options as $service_name) {
 
-    $form['main_widget_settings']['services'][$service_name]['service'] = array(
+    $form['default_sets']['services'][$service_name]['service'] = array(
       '#markup' => $service_name,
     );
 
-    $form['main_widget_settings']['services'][$service_name]['enabled'] = array(
+    $form['default_sets']['services'][$service_name]['enabled'] = array(
       '#type' => 'checkbox',
       '#default_value' => $item->services[$service_name]['enabled'],
     );
 
     // Store the buttons markup along other data.
-    $form['main_widget_settings']['services'][$service_name]['markup'] = array(
+    $form['default_sets']['services'][$service_name]['markup'] = array(
       '#type' => 'hidden',
       '#value' => sharerich_get_service_content($service_name, $item->machinename),
     );
 
     // The field contains sort info (weights).
-    $form['main_widget_settings']['services'][$service_name]['weight'] = array(
+    $form['default_sets']['services'][$service_name]['weight'] = array(
       '#type' => 'weight',
       '#title' => t('Weight'),
       '#title_display' => 'invisible',
@@ -106,12 +106,12 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
   }
 
   // Sort the services.
-  uasort($form['main_widget_settings']['services'], 'drupal_sort_weight');
+  uasort($form['default_sets']['services'], 'drupal_sort_weight');
 
   foreach ($options as $service_name) {
     $var_name = 'sharerich_custom_' . $service_name;
 
-    $form['custom_widget_settings'][$var_name] = array(
+    $form['custom_sets'][$var_name] = array(
       '#type' => 'textarea',
       '#title' => t('Custom code for %name', array('%name' => $service_name)),
       '#description' => '',
