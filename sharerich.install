@@ -124,7 +124,7 @@ function sharerich_update_7001() {
   // Create a new object.
   $imported = (ctools_export_crud_new('sharerich_sets'));
   $imported->machinename = 'imported_set';
-  $imported->title = t('Share This');
+  $imported->title = variable_get('sharerich_title', t('Share This'));
   $imported->block = TRUE;
 
   // Port legacy services.
