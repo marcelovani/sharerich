@@ -84,7 +84,7 @@ function sharerich_install() {
  */
 function sharerich_uninstall() {
 
-  drupal_uninstall_schema('sharerich_sets');
+  drupal_uninstall_schema('sharerich');
 
   // Clean entity configurations.
   foreach (node_type_get_types() as $node) {
@@ -117,7 +117,7 @@ function sharerich_update_7001() {
 
   // Install schema.
   if (!db_table_exists('sharerich_sets')) {
-    drupal_install_schema('sharerich_sets');
+    drupal_install_schema('sharerich');
   }
 
   // Convert global sets into new ctools storage.
