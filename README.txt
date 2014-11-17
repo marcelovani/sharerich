@@ -27,6 +27,8 @@ $ git clone https://github.com/kni-labs/rrssb libraries/rrssb
 
 Now you can enable Sharerich.
 
+Go to the permissions page and set them accordingly.
+
 Configuration
 =============
 - Visit /admin/structure/sharerich/settings for general settings;
