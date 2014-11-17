@@ -32,11 +32,7 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
   $item = $form_state['item'];
 
   // Generate the list of available services.
-  $dir = drupal_get_path('module', 'sharerich') . '/services';
-  $services = file_scan_directory($dir, '/.inc/', array(), 0);
-  $options = array_map(function($service) {
-    return $service->name;
-  }, $services);
+  $services = sharerich_get_services();
 
   $form['settings'] = array(
     '#type' => 'vertical_tabs',
@@ -79,7 +75,7 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
     '#tree' => TRUE,
   );
 
-  foreach ($options as $service_name) {
+  foreach ($services as $service_name) {
 
     $form['default_sets']['services'][$service_name]['service'] = array(
       '#markup' => $service_name,
@@ -108,7 +104,8 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
   // Sort the services.
   uasort($form['default_sets']['services'], 'drupal_sort_weight');
 
-  foreach ($options as $service_name) {
+  // Custom widgets.
+  foreach ($services as $service_name) {
     $var_name = 'sharerich_custom_' . $service_name;
 
     $form['custom_sets'][$var_name] = array(

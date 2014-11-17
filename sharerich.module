@@ -228,6 +228,18 @@ function hook_sharerich_buttons_alter(&$buttons) {
 }
 
 /**
+ * Helper to scan the services folder.
+ * @return A list of file names.
+ */
+function sharerich_get_services() {
+  $dir = drupal_get_path('module', 'sharerich') . '/services';
+  $list = file_scan_directory($dir, '/.inc/', array(), 0);
+  return array_map(function($service) {
+    return $service->name;
+  }, $list);
+}
+
+/**
  * Helper to load services from the disk.
  */
 function sharerich_load_service($service_name) {
@@ -250,7 +262,7 @@ function sharerich_get_service_content($service_name, $set_name = '') {
     return $sharerich_set->services[$service_name]['markup'];
   }
 
-  // On new set creation.
+  // Load services from templates.
   return sharerich_load_service($service_name);
 }
 
