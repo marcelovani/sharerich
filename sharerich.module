@@ -431,7 +431,10 @@ function sharerich_page_build() {
   $js = 'if (typeof(jQuery.on) != "function") {
           jQuery.fn.extend({
             on: function(event, callback, fallback) {
-              return this.live(event, typeof callback === "function" ? callback : fallback);
+              switch (typeof callback) {
+                case "function": return this.live(event, callback);
+                case "string"  : return jQuery(callback).live(event, fallback);
+              }
             }
           })
         }';
