@@ -163,6 +163,11 @@ function sharerich_block_view($delta = '') {
  * Returns markup with list of share buttons.
  */
 function sharerich_get_buttons($sharerich_set, $node = NULL) {
+  // Ignore set if it is disabled.
+  if (isset($sharerich_set->disabled) && $sharerich_set->disabled) {
+    return NULL;
+  }
+
   // Create a unique $key in order to render all the whims.
   if (!is_null($node)) {
     $key = $node->nid;
@@ -683,7 +688,6 @@ function sharerich_field_formatter_settings_summary($build, $summary = NULL) {
   else {
     $summary[] = t('No set selected.');
   }
-
 
   return implode('<br />', $summary);
 }
