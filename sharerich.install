@@ -164,6 +164,7 @@ function sharerich_update_7001() {
   // Remove old variables.
   variable_del('sharerich_custom_0');
   variable_del('sharerich_services');
+  variable_del('sharerich_title');
 
   field_info_cache_clear();
 }
