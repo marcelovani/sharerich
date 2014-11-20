@@ -489,6 +489,20 @@ function sharerich_page_build() {
 
   // Add the module css.
   drupal_add_css(drupal_get_path('module', 'sharerich') . '/css/sharerich.css');
+
+  // Backwards compatibility to jQuery.live.
+  $js = 'if (typeof(jQuery.on) != "function") {
+          jQuery.fn.extend({
+            on: function(event, callback, fallback) {
+              switch (typeof callback) {
+                case "function": return this.live(event, callback);
+                case "string"  : return jQuery(callback).live(event, fallback);
+              }
+            }
+          })
+        }';
+
+  drupal_add_js($js, array('type' => 'inline', 'scope' => 'header'));
 }
 
 /**
