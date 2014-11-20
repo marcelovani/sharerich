@@ -8,3 +8,6 @@ configure = admin/structure/sharerich/settings
 dependencies[] = ctools
 dependencies[] = libraries
 dependencies[] = token
+
+files[] = plugins/export_ui/sharerich_set_ui.class.inc
+files[] = plugins/export_ui/sharerich_ctools_export_ui.inc

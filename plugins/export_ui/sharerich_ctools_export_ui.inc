@@ -18,10 +18,14 @@ $plugin = array(
   'title plural' => t('sets'),
   'title singular proper' => t('Sharerich set'),
   'title plural proper' => t('Sharerich sets'),
+  // Define the class to use as a handler for DFP ad tags.
+  'handler' => array(
+     'class' => 'sharerich_set_ui',
+     'parent' => 'ctools_export_ui',
+  ),
   // Define the names of the functions that provide the add/edit forms.
   'form' => array(
     'settings' => 'sharerich_ctools_export_ui_form',
-  // 'submit' and 'validate' are also valid callbacks.
   ),
 );
 
@@ -29,13 +33,21 @@ $plugin = array(
  * Define the preset add/edit form.
  */
 function sharerich_ctools_export_ui_form(&$form, &$form_state) {
-  $item = $form_state['item'];
+  $item = ($form_state['op'] == 'add' ? $form_state['item'] : $form_state['item']->raw);
 
   // Generate the list of available services.
   $services = sharerich_get_services();
 
   $form['settings'] = array(
     '#type' => 'vertical_tabs',
+  );
+
+  $form['general'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('General settings'),
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+    '#group' => 'settings',
   );
 
   $form['default_sets'] = array(
@@ -55,20 +67,6 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
     '#description' => '<strong>' . t('In order to edit the markup, you need to enable the services in the "Default Sets tab".') . '</strong>',
   );
 
-  $form['default_sets']['title'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Title'),
-    '#description' => t('This is the title that appears above the share buttons.'),
-    '#default_value' => !empty($item->title) ? $item->title : '',
-  );
-
-  $form['default_sets']['block'] = array(
-    '#type' => 'checkbox',
-    '#title' => t('Create a block for this button set.'),
-    '#description' => '',
-    '#default_value' => $item->block,
-  );
-  
   // Use our dragable table theme function.
   $form['default_sets']['services'] = array(
     '#theme' => 'sharerich_manage_services',
@@ -103,6 +101,48 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
 
   // Sort the services.
   uasort($form['default_sets']['services'], 'drupal_sort_weight');
+
+  $form['general']['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Set name'),
+    '#required' => TRUE,
+    '#maxlength' => 64,
+    '#default_value' => $item->name,
+    '#description' => t('Example: Article Top'),
+    '#weight' => -2,
+  );
+  $form['general']['machinename'] = array(
+    '#type' => 'machine_name',
+    '#title' => t('Machine name'),
+    '#maxlength' => 64,
+    '#default_value' => $item->machinename,
+    '#description' => t('Only use letters, numbers and underscores. Example: article_top'),
+    '#machine_name' => array(
+      'exists' => 'sharerich_set_name_exists',
+      'source' => array('general', 'name'),
+    ),
+    '#weight' => -1,
+  ) + $form['info']['machinename'];
+  unset($form['info']);
+
+  $form['general']['block'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Create a block for this button set.'),
+    '#description' => '',
+    '#default_value' => $item->block,
+  );
+
+  $form['general']['title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title'),
+    '#description' => t('This is the title that appears above the share buttons.'),
+    '#default_value' => !empty($item->title) ? $item->title : '',
+    '#states' => array(
+      'visible' => array(
+        ':input[name="block"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
 
   // Custom widgets.
   foreach ($services as $service_name) {
@@ -164,4 +204,15 @@ function theme_sharerich_manage_services($variables) {
   drupal_add_tabledrag('service-order', 'order', 'sibling', 'services-order-weight');
 
   return $output;
+}
+
+/**
+ * Check if the given machinename is unique in the dfp_tags table.
+ */
+function sharerich_set_name_exists($machinename) {
+  $select = db_select('sharerich_sets', 's');
+  $select->addExpression('COUNT(*)');
+  $select->condition('s.machinename', $machinename);
+
+  return $select->execute()->fetchField();
 }
