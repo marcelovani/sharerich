@@ -119,7 +119,7 @@ function sharerich_uninstall() {
 /**
  * Sharerich 2.x upgrade.
  */
-function sharerich_update_7001() {
+function sharerich_update_7200() {
   module_load_include('inc', 'ctools', 'includes/export');
 
   // Install schema.

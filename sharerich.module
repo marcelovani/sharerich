@@ -360,7 +360,6 @@ function sharerich_node_view($node, $view_mode, $langcode) {
       $node->content[$sharerich_name] = sharerich_get_buttons($sharerich_set, $node, $machinename);
     }
   }
-  if ($view_mode == 'full') kpr($node->content);
 }
 
 /**
