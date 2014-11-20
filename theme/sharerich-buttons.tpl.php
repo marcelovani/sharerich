@@ -1,4 +1,4 @@
-<div class="sharerich-wrapper">
+<div <?php print $attributes; ?>>
   <?php if ($title) : ?>
     <h4><?php print $title; ?></h4>
   <?php endif; ?>

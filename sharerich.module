@@ -231,12 +231,18 @@ function sharerich_get_buttons($sharerich_set, $node = NULL, $machinename = '') 
 function template_preprocess_sharerich_buttons(&$variables) {
   $element = $variables['element'];
 
+  // Provide default template suggestions.
+  $variables['theme_hook_suggestions'][] = 'sharerich_buttons__' . $element['#sharerich_set']->machinename;
+
   // Configure default template variables.
   $variables['title'] = $element['#title'];
   $variables['buttons'] = $element['buttons'];
-
-  // Provide default template suggestions.
-  $variables['theme_hook_suggestions'][] = 'sharerich_buttons__' . $element['#sharerich_set']->machinename;
+  $variables['attributes_array'] = array(
+    'class' => array(
+      'sharerich-wrapper',
+      drupal_html_class('sharerich-' . $element['#sharerich_set']->machinename . '-wrapper'),
+    )
+  );
 }
 
 /**
