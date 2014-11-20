@@ -75,6 +75,43 @@ function sharerich_schema() {
 }
 
 /**
+ * Implements hook_requirements().
+ */
+function sharerich_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+
+  if ($phase == 'runtime') {
+    module_load_include('module', 'libraries', 'libraries');
+
+    // require.js library.
+    $library = libraries_detect('rrssb');
+    $requirements['sharerich_rrssb'] = array(
+      'title' => $t('@name library', array('@name' => $library['title'])),
+      'value' => $t('Unknown'),
+    );
+    $requirements['sharerich_rrssb']['severity'] = REQUIREMENT_OK;
+
+    if (!$library['installed']) {
+      $requirements['sharerich_rrssb']['value'] = ucfirst($library['error']);
+      $requirements['sharerich_rrssb']['description'] = $library['error message'];
+      $options = array(
+        '!url' => $library['download url'],
+        '@name' => $library['name'],
+        '%path' => 'libraries/' . $library['machine name'],
+      );
+      $requirements['sharerich_rrssb']['description'] .= ' ' . $t('Download the library from the <a href="!url">download page</a> and make sure it is installed in the %path folder.', $options);
+      $requirements['sharerich_rrssb']['severity'] = REQUIREMENT_ERROR;
+    }
+    else {
+      $requirements['sharerich_rrssb']['value'] = $t('@version', array('@version' => $library['version']));
+    }
+  }
+
+  return $requirements;
+}
+
+/**
  * Implements hook_install().
  */
 function sharerich_install() {
@@ -172,6 +209,8 @@ function sharerich_update_7200() {
   variable_del('sharerich_custom_0');
   variable_del('sharerich_services');
   variable_del('sharerich_title');
+  variable_del('sharerich_add_css');
+  variable_del('sharerich_add_js');
 
   field_info_cache_clear();
 }

@@ -40,23 +40,17 @@ function sharerich_admin_form() {
     '#default_value' => variable_get('sharerich_github_username'),
   );
 
-  $form['css_js'] = array(
+  $form['advanced'] = array(
     '#type' => 'fieldset',
-    '#title' => t('CSS and JavaScript'),
+    '#title' => t('Advanced settings'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
-  $form['css_js']['sharerich_add_js'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Add js'),
-    '#description' => t('Enter the url for each js file.'),
-    '#default_value' => variable_get('sharerich_add_js'),
-  );
-  $form['css_js']['sharerich_add_css'] = array(
-    '#type' => 'textarea',
-    '#title' => t('Add CSS'),
-    '#description' => t('Enter the url for each CSS file.'),
-    '#default_value' => variable_get('sharerich_add_css'),
+  $form['advanced']['sharerich_skip_js'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Load the rrssb library JavaScript'),
+    '#description' => t('Disable this if the library is loaded via a non-standard Drupal method.'),
+    '#default_value' => variable_get('sharerich_skip_js', FALSE),
   );
 
   return system_settings_form($form);

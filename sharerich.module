@@ -38,13 +38,39 @@ function sharerich_libraries_info() {
       'title' => 'Ridiculously Responsive Social Share Buttons',
       'vendor url' => 'http://kurtnoble.com/labs/rrssb/',
       'download url' => 'https://github.com/kni-labs/rrssb',
-      'path' => '/',
+      'path' => '',
+      'version arguments' => array(
+        'file' => 'bower.json',
+        'pattern' => '/version"\s*:\s*"([0-9\.]+)",$/',
+      ),
       'files' => array(
         'js' => array(
-          'js/rssb.min.js',
+          'rrssb.js',
         ),
         'css' => array(
           'css/rrssb.css',
+        ),
+      ),
+      'variants' => array(
+        'minified' => array(
+          'files' => array(
+            'css' => array(
+              'css/rrssb.css',
+            ),
+            'js' => array(
+              'js/rrssb.min.js',
+            ),
+          ),
+        ),
+        'source' => array(
+          'files' => array(
+            'css' => array(
+              'css/rrssb.css',
+            ),
+            'js' => array(
+              'js/rrssb.js',
+            ),
+          ),
         ),
       ),
     ),
@@ -445,52 +471,24 @@ function _sharerich_extra_field_default_info_set(&$info, $type, $size) {
  * Implements hook_page_build().
  */
 function sharerich_page_build() {
-
   if (path_is_admin(current_path())) {
     return;
   }
 
-  // Add CSS from the configuration page.
-  $css = explode('|', preg_replace('/(\r\n?|\n)/', '|', variable_get('sharerich_add_css')));
-  foreach ($css as $key => $url) {
-    if (empty($url)) {
-      continue;
-    }
-
-    if (stripos($url, 'http') !== FALSE) {
-      drupal_add_css($url, 'external');
-    }
-    else {
-      drupal_add_css($url);
-    }
+  if (!variable_get('sharerich_skip_js', FALSE)) {
+    // Load the library via the libraries module.
+    libraries_load('rrssb', variable_get('sharerich_library_variant', 'minified'));
   }
-
-  // Add Js from the configuration page.
-  $js = explode('|', preg_replace('/(\r\n?|\n)/', '|', variable_get('sharerich_add_js')));
-  foreach ($js as $key => $url) {
-    if (!empty($url)) {
-      if (stripos($url, 'http') !== FALSE) {
-        drupal_add_js($url, 'external');
-      }
-      else {
-        drupal_add_js($url, array('scope' => 'footer'));
+  else {
+    if ($library = libraries_detect('rrssb')) {
+      foreach ($library['files']['css'] as $path => $value) {
+        drupal_add_css($library['library path'] . '/'. $path);
       }
     }
   }
 
-  // Backwards compatibility to jQuery.live.
-  $js = 'if (typeof(jQuery.on) != "function") {
-          jQuery.fn.extend({
-            on: function(event, callback, fallback) {
-              switch (typeof callback) {
-                case "function": return this.live(event, callback);
-                case "string"  : return jQuery(callback).live(event, fallback);
-              }
-            }
-          })
-        }';
-
-  drupal_add_js($js, array('type' => 'inline', 'scope' => 'header'));
+  // Add the module css.
+  drupal_add_css(drupal_get_path('module', 'sharerich') . '/css/sharerich.css');
 }
 
 /**
