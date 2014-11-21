@@ -46,10 +46,20 @@ function sharerich_admin_form() {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+  $form['advanced']['sharerich_library_variant'] = array(
+    '#type' => 'radios',
+    '#title' => t('Library variant'),
+    '#options' => array(
+      'minified' => t('Minified'),
+      'source' => t('Source'),
+    ),
+    '#description' => t('Selecting source may help with JavaScript debugging during development.'),
+    '#default_value' => variable_get('sharerich_library_variant', 'minified'),
+  );
   $form['advanced']['sharerich_skip_js'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Load the rrssb library JavaScript'),
-    '#description' => t('Disable this if the library is loaded via a non-standard Drupal method.'),
+    '#title' => t('Do not load the rrssb library JavaScript'),
+    '#description' => t('Enable this if the library is loaded via a non-standard Drupal method and should not be added by the Sharerich module.'),
     '#default_value' => variable_get('sharerich_skip_js', FALSE),
   );
 

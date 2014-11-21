@@ -43,6 +43,11 @@ function sharerich_libraries_info() {
         'file' => 'bower.json',
         'pattern' => '/version"\s*:\s*"([0-9\.]+)",$/',
       ),
+      'callbacks' => array(
+        'pre-load' => array(
+          'sharerich_libraries_preload',
+        ),
+      ),
       'files' => array(
         'js' => array(
           'rrssb.js',
@@ -75,6 +80,15 @@ function sharerich_libraries_info() {
       ),
     ),
   );
+}
+
+/**
+ * Use a callback function to move any JavaScript to the footer.
+ */
+function sharerich_libraries_preload(&$library) {
+  foreach ($library['files']['js'] as $file => $options) {
+    $library['files']['js'][$file]['scope'] = 'footer';
+  }
 }
 
 /**
@@ -475,6 +489,21 @@ function sharerich_page_build() {
     return;
   }
 
+  // Backwards compatibility to jQuery.live.
+  $js = <<<JS
+if (typeof(jQuery.on) !== "function") {
+  jQuery.fn.extend({
+    on: function(event, callback, fallback) {
+      switch (typeof callback) {
+        case "function": return this.live(event, callback);
+        case "string"  : return jQuery(callback).live(event, fallback);
+      }
+    }
+  });
+}
+JS;
+  drupal_add_js($js, array('type' => 'inline', 'scope' => 'header'));
+
   if (!variable_get('sharerich_skip_js', FALSE)) {
     // Load the library via the libraries module.
     libraries_load('rrssb', variable_get('sharerich_library_variant', 'minified'));
@@ -489,20 +518,6 @@ function sharerich_page_build() {
 
   // Add the module css.
   drupal_add_css(drupal_get_path('module', 'sharerich') . '/css/sharerich.css');
-
-  // Backwards compatibility to jQuery.live.
-  $js = 'if (typeof(jQuery.on) != "function") {
-          jQuery.fn.extend({
-            on: function(event, callback, fallback) {
-              switch (typeof callback) {
-                case "function": return this.live(event, callback);
-                case "string"  : return jQuery(callback).live(event, fallback);
-              }
-            }
-          })
-        }';
-
-  drupal_add_js($js, array('type' => 'inline', 'scope' => 'header'));
 }
 
 /**

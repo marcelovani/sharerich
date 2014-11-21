@@ -151,6 +151,8 @@ function sharerich_uninstall() {
   variable_del('sharerich_block_hashes');
   variable_del('sharerich_services');
   variable_del('sharerich_title');
+  variable_del('sharerich_library_variant');
+  variable_del('sharerich_skip_js');
 }
 
 /**
