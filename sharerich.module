@@ -152,6 +152,10 @@ function sharerich_block_info() {
       continue;
     }
     // Create a hash when the machine name is too big.
+    //
+    // This issue is fixed starting with drupal 7.33 release
+    // https://www.drupal.org/node/466576
+    // Keeping the workaround for older releases.
     if (drupal_strlen($sharerich_set->machinename) >= 32) {
       $delta = md5($sharerich_set->machinename);
       $hashes[$delta] = $sharerich_set->machinename;
@@ -340,10 +344,13 @@ function sharerich_form_node_type_form_alter(&$form, &$form_state) {
     '#access' => user_access('administer nodes'),
   );
   $entity_type = $form['#node_type']->type;
+  $sharerich_show_options = drupal_map_assoc(array(0, 1, 2, 3, 4, 5));
+  $sharerich_show_options[0] = t('Disabled');
   $form['sharerich']['show'] = array(
     '#type' => 'select',
-    '#options' => drupal_map_assoc(array(0, 1, 2, 3, 4, 5)),
+    '#options' => $sharerich_show_options,
     '#title' => t('Enable Sharerich for this content type.'),
+    '#description' => t('Select desired number of sharerich extra fields.'),
     '#default_value' => variable_get('sharerich_node_' . $entity_type, 0),
     '#suffix' => t('After enabling Sharerich you need to configure each'
       . ' display on Manage display set.<br/>Sets are located '
@@ -680,7 +687,7 @@ function sharerich_form_field_ui_display_overview_form_alter(&$form, &$form_stat
         '#suffix' => '</div>',
       );
     }
-    if (!isset($form_state['formatter_settings'][$field_name]) || (isset($form_state['formatter_settings'][$field_name]) && empty($form_state['formatter_settings'][$field_name]))) {
+    if (empty($form_state['formatter_settings'][$field_name])) {
       $bundle_settings = field_bundle_settings($form['#entity_type'], $form['#bundle']);
       if (isset($bundle_settings['extra_fields']['display'][$field_name][$form['#view_mode']]['settings'])) {
         $form_state['formatter_settings'][$field_name] = $bundle_settings['extra_fields']['display'][$field_name][$form['#view_mode']]['settings'];
@@ -744,8 +751,8 @@ function _sharerich_display_overview_form_submit($form, &$form_state) {
 
 /**
  * Helper function to get sharerich extra field instances from a display.
- * @param  array  $source [description]
- * @return [type]         [description]
+ * @param  array  $source Drupal FAPI
+ * @return array  $names  Sharerich related fields
  */
 function _sharerich_get_field_names($source = array()) {
   $names = array();

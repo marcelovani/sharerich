@@ -14,7 +14,7 @@ function sharerich_schema() {
     'export' => array(
       'key' => 'machinename',
       'primary key' => 'swid',
-      'identifier' => 'sharerich_set', // Exports will be available as $sharerich
+      'identifier' => 'sharerich_set', // Exports will be available as $sharerich_set
       'default hook' => 'sharerich_set', // Function hook name.
       'api' => array(
         'owner' => 'sharerich',
