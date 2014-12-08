@@ -498,16 +498,16 @@ function sharerich_page_build() {
 
   // Backwards compatibility to jQuery.live.
   $js = <<<JS
-if (typeof(jQuery.on) !== "function") {
-  jQuery.fn.extend({
+(function($) {
+  typeof $ && typeof $.fn.on !== "function" && $.fn.extend({
     on: function(event, callback, fallback) {
       switch (typeof callback) {
         case "function": return this.live(event, callback);
-        case "string"  : return jQuery(callback).live(event, fallback);
+        case "string"  : return $(callback).live(event, fallback);
       }
     }
   });
-}
+}(jQuery));
 JS;
   drupal_add_js($js, array('type' => 'inline', 'scope' => 'header'));
 
