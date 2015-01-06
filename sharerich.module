@@ -350,16 +350,18 @@ function sharerich_page_build() {
   }
 
   // Backwards compatibility to jQuery.live.
-  $js = 'if (typeof(jQuery.on) != "function") {
-          jQuery.fn.extend({
-            on: function(event, callback, fallback) {
-              switch (typeof callback) {
-                case "function": return this.live(event, callback);
-                case "string"  : return jQuery(callback).live(event, fallback);
-              }
-            }
-          })
-        }';
+   $js = <<<JS
+(function($) {
+  typeof $ && typeof $.fn.on !== "function" && $.fn.extend({
+     on: function(event, callback, fallback) {
+       switch (typeof callback) {
+         case "function": return this.live(event, callback);
+         case "string"  : return $(callback).live(event, fallback);
+       }
+     }
+   });
+}(jQuery));
+JS;
   drupal_add_js($js,  array('type' => 'inline', 'scope' => 'header'));
 }
 
