@@ -15,10 +15,10 @@ function sharerich_schema() {
       'key' => 'machinename',
       'primary key' => 'swid',
       'identifier' => 'sharerich_set', // Exports will be available as $sharerich_set
-      'default hook' => 'sharerich_set', // Function hook name.
+      'default hook' => 'default_sharerich_sets', // Function hook name.
       'api' => array(
         'owner' => 'sharerich',
-        'api' => 'sharerich_sets', // Base name for api include files.
+        'api' => 'default_sharerich_sets', // Base name for api include files.
         'minimum_version' => 1,
         'current_version' => 1,
       ),
