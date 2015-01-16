@@ -115,12 +115,32 @@ function sharerich_requirements($phase) {
  * Implements hook_install().
  */
 function sharerich_install() {
+  // Set paths to libraries.
   if (libraries_load('rrssb')) {
     variable_set('sharerich_add_js', libraries_get_path('rrssb') . '/js/rrssb.min.js');
     variable_set('sharerich_add_css', libraries_get_path('rrssb') . '/css/rrssb.css' . PHP_EOL .
       drupal_get_path('module', 'sharerich') . '/css/sharerich.css'
     );
   }
+
+  // Create default button set.
+  $default_set = ctools_export_crud_new('sharerich_sets');
+  $default_set->name = 'Default set';
+  $default_set->machinename = 'default_set';
+  $default_set->title = t('Share This');
+  $default_set->block = TRUE;
+
+  module_load_include('module', 'sharerich', 'sharerich');
+  $services = array('email', 'facebook', 'twitter', 'googleplus');
+  foreach (sharerich_get_services() as $service_name) {
+    if (in_array($service_name, $services)) {
+      $default_set->services[$service_name]['enabled'] = TRUE;
+      $content = sharerich_get_service_content($service_name);
+      $default_set->services[$service_name]['markup'] = $content;
+      $default_set->services[$service_name]['weight'] = 0;
+    }
+  }
+  ctools_export_crud_save('sharerich_sets', $default_set);
 }
 
 /**
