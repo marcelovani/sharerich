@@ -50,48 +50,48 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
     '#group' => 'settings',
   );
 
-  $form['default_sets'] = array(
+  $form['available_services'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Default Sets'),
+    '#title' => t('Services'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#group' => 'settings',
   );
 
-  $form['custom_sets'] = array(
+  $form['custom_markup'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Custom Sets'),
+    '#title' => t('Custom Markup'),
     '#collapsible' => TRUE,
     '#collapsed' => FALSE,
     '#group' => 'settings',
-    '#description' => '<strong>' . t('In order to edit the markup, you need to enable the services in the "Default Sets tab".') . '</strong>',
+    '#description' => '<strong>' . t('In order to edit the markup, you need to enable the services in the "Services tab".') . '</strong>',
   );
 
   // Use our dragable table theme function.
-  $form['default_sets']['services'] = array(
+  $form['available_services']['services'] = array(
     '#theme' => 'sharerich_manage_services',
     '#tree' => TRUE,
   );
 
   foreach ($services as $service_name) {
 
-    $form['default_sets']['services'][$service_name]['service'] = array(
+    $form['available_services']['services'][$service_name]['service'] = array(
       '#markup' => $service_name,
     );
 
-    $form['default_sets']['services'][$service_name]['enabled'] = array(
+    $form['available_services']['services'][$service_name]['enabled'] = array(
       '#type' => 'checkbox',
       '#default_value' => $item->services[$service_name]['enabled'],
     );
 
     // Store the buttons markup along other data.
-    $form['default_sets']['services'][$service_name]['markup'] = array(
+    $form['available_services']['services'][$service_name]['markup'] = array(
       '#type' => 'hidden',
       '#value' => sharerich_get_service_content($service_name, $item->machinename),
     );
 
     // The field contains sort info (weights).
-    $form['default_sets']['services'][$service_name]['weight'] = array(
+    $form['available_services']['services'][$service_name]['weight'] = array(
       '#type' => 'weight',
       '#title' => t('Weight'),
       '#title_display' => 'invisible',
@@ -100,7 +100,7 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
   }
 
   // Sort the services.
-  uasort($form['default_sets']['services'], 'drupal_sort_weight');
+  uasort($form['available_services']['services'], 'drupal_sort_weight');
 
   $form['general']['name'] = array(
     '#type' => 'textfield',
@@ -148,7 +148,7 @@ function sharerich_ctools_export_ui_form(&$form, &$form_state) {
   foreach ($services as $service_name) {
     $var_name = 'sharerich_custom_' . $service_name;
 
-    $form['custom_sets'][$var_name] = array(
+    $form['custom_markup'][$var_name] = array(
       '#type' => 'textarea',
       '#title' => t('Custom code for %name', array('%name' => $service_name)),
       '#description' => '',
@@ -196,7 +196,7 @@ function theme_sharerich_manage_services($variables) {
     );
   }
 
-  $header = array('', t('Service'), t('Enabled/Disabled'), t('Weight'));
+  $header = array('', t('Service'), t('Enabled'), t('Weight'));
   $output = drupal_render($form['note']);
   $output .= theme('table', array('header' => $header, 'rows' => $rows, 'attributes' => array('id' => 'service-order')));
   $output .= drupal_render_children($form);
