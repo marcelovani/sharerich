@@ -12,7 +12,7 @@ require_once('includes/sharerich.tokens.inc');
  * Tell CTools that we support the default_mymodule_presets API.
  */
 function sharerich_ctools_plugin_api($owner, $api) {
-  if ($owner == 'sharerich' && $api == 'sharerich_sets') {
+  if ($owner == 'sharerich' && $api == 'default_sharerich_sets') {
     return array('version' => 1);
   }
 }
