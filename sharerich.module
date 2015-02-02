@@ -235,8 +235,10 @@ function sharerich_get_buttons($sharerich_set, $node = NULL, $machinename = '') 
       $buttons[$service_name] = array(
         'data' => $service['markup'],
         'class' => array($service_name),
+        'weight' => $service['weight'],
       );
     }
+    uasort($buttons, 'drupal_sort_weight');
 
     // Allow other modules to alter the buttons markup.
     drupal_alter('sharerich_buttons', $buttons, $node);
