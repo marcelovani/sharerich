@@ -283,11 +283,16 @@ function template_preprocess_sharerich_buttons(&$variables) {
   // Configure default template variables.
   $variables['title'] = $element['#title'];
   $variables['buttons'] = $element['buttons'];
-  $variables['attributes_array'] = array(
+  $attributes = array(
     'class' => array(
       'sharerich-wrapper',
       drupal_html_class('sharerich-' . $element['#sharerich_set']->machinename . '-wrapper'),
     )
+  );
+
+  // Merge incoming attributes with default ones.
+  $variables['attributes_array'] = array_merge_recursive(
+    $attributes, !empty($element['attributes_array']) ? $element['attributes_array'] : array()
   );
 }
 
@@ -413,6 +418,11 @@ function sharerich_node_view($node, $view_mode, $langcode) {
     $visible = $config['extra_fields']['display'][$sharerich_name][$view_mode_compat]['visible'];
     if ($visible && $sharerich_set = sharerich_set_load($machinename)) {
       $node->content[$sharerich_name] = sharerich_get_buttons($sharerich_set, $node, $machinename);
+      $node->content[$sharerich_name]['attributes_array'] = array(
+        'class' => array(
+          drupal_html_class($sharerich_name),
+        )
+      );
     }
   }
 }
