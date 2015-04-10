@@ -403,7 +403,7 @@ function sharerich_node_view($node, $view_mode, $langcode) {
   $config = field_bundle_settings('node', $node->type);
 
   // Fall back to default view mode if custom settings are disabled.
-  $view_mode_compat = ($config['view_modes'][$view_mode]['custom_settings']) ? $view_mode : 'default';
+  $view_mode_compat = (isset($config['view_modes'][$view_mode]) && $config['view_modes'][$view_mode]['custom_settings']) ? $view_mode : 'default';
 
   foreach ($extra['node'][$node->type]['display'] as $sharerich_name => $default_instance) {
     // Check if the specified button set is configured for that type.
