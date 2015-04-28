@@ -79,7 +79,6 @@ function sharerich_tokens($type, $tokens, array $data = array(), array $options 
           else {
             $value = token_replace('[current-page:title]');
           }
-          $value = rawurlencode($value);
           break;
 
         case 'summary':
