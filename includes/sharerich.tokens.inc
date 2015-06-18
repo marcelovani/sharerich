@@ -79,6 +79,7 @@ function sharerich_tokens($type, $tokens, array $data = array(), array $options 
           else {
             $value = token_replace('[current-page:title]');
           }
+          $value = rawurlencode(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
           break;
 
         case 'summary':
@@ -88,7 +89,7 @@ function sharerich_tokens($type, $tokens, array $data = array(), array $options 
           else {
             $value = token_replace('[site:name]');
           }
-          $value = rawurlencode($value);
+          $value = rawurlencode(html_entity_decode($value, ENT_QUOTES, 'UTF-8'));
           break;
 
       }
