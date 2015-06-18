@@ -1,4 +1,4 @@
-<a href="http://twitter.com/home?status=[sharerich:title]%20[sharerich:url]" class="popup">
+<a href="https://twitter.com/intent/tweet?url=[sharerich:url]&text=[sharerich:title]" class="popup">
   <span class="icon">
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
            width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
