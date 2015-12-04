@@ -6,7 +6,7 @@
  */
 
 /**
- * Customizations of the DART Tags UI.
+ * Customizations of the Sharerich UI.
  */
 class sharerich_set_ui extends ctools_export_ui {
 
