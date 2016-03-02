@@ -1,3 +1,13 @@
+.sharerich-form .service-disabled {
+    color: #5e594f;
+}
+.sharerich-form .markup {
+    float: left;
+    width: 80%;
+}
+.sharerich-form .button.reset {
+    float: left;
+}
 .item-list ul.sharerich-buttons {
     padding: 0;
     margin: 0;

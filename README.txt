@@ -4,14 +4,6 @@ Description
 ===========
 Customisable Share buttons for social media.
 
-Dependencies
-- ctools
-- token
-- libraries
-
-Supports
-- google_analytics_et (If the module is enabled, GA event tracking will be added to the share buttons)
-
 Installation
 ============
 Put the modules into your sites/module/contrib folder;
@@ -33,8 +25,8 @@ Go to the permissions page and set them accordingly.
 
 Configuration
 =============
+- Visit /admin/config/sharerich/settings for general settings;
 - Visit /admin/structure/sharerich and create your own button sets;
-- Visit /admin/structure/sharerich/settings for general settings;
 - Go to each content type, open the Sharerich tab and select how many button sets you want to create.
 - Go to each display of the content type and choose which button set to use with each Sharerich field.
 
@@ -67,3 +59,7 @@ Notes
   hook_sharerich_buttons_alter(&$buttons) {
 
   }
+
+TODO
+====
+- google_analytics_et (If the module is enabled, GA event tracking will be added to the share buttons)

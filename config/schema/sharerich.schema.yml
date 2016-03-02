@@ -1,0 +1,33 @@
+sharerich.settings:
+  type: mapping
+  label: Settings
+  mapping:
+    sharerich_facebook_app_id:
+      type: string
+    sharerich_facebook_site_url:
+      type: string
+    sharerich_youtube_username:
+      type: string
+    sharerich_github_username:
+      type: string
+sharerich.sharerich.*:
+  type: config_entity
+  label: 'Sharerich config'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    create_block:
+      type: boolean
+      label: 'Create a block for this button set'
+    block_title:
+      type: string
+      label: 'Block title'
+    services:
+      type: sequence
+      label: 'Enabled services'
+    uuid:
+      type: string

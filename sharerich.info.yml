@@ -1,0 +1,6 @@
+name: 'Sharerich'
+project: sharerich
+description: 'Provides an Extra field for Custom Share Buttons'
+core: 8.x
+package: 'Sharing'
+type: module

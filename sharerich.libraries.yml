@@ -1,0 +1,11 @@
+sharerich:
+  version: VERSION
+  js:
+    js/sharerich.js: {}
+  dependencies:
+      - core/jquery
+      - core/drupal
+      - core/drupalSettings
+  css:
+    theme:
+      css/sharerich.css: {}
