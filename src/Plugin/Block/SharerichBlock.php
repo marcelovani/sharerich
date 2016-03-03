@@ -64,7 +64,8 @@ class SharerichBlock extends BlockBase {
       $services = array();
       foreach ($sharerich_set->services as $name => $service) {
         $services[] = [
-          '#wrapper_attributes' => ['class' => ['sharerich-button']],
+          '#attributes' => ['class' => ['sharerich-buttons-wrapper', 'rrssb-buttons-wrapper']],
+          '#wrapper_attributes' => ['class' => ['rrssb-' . $name]],
           '#markup' => $service['markup'],
           '#allowed_tags' => ['a', 'svg', 'path'],
         ];
@@ -73,9 +74,12 @@ class SharerichBlock extends BlockBase {
     $build = array(
       '#theme' => 'item_list',
       '#items' => $services,
-      '#wrapper_attributes' => array(),
-      '#attributes' => array(),
+      '#type' => 'ul',
+      '#wrapper_attributes' => ['class' => ['sharerich-wrapper']],
+      '#attributes' => ['class' => ['sharerich-buttons', 'rrssb-buttons']],
+      '#attached' => array('library' => array('sharerich/rrssb')),
     );
+    //kprint_r(drupal_render($build));
     return $build;
   }
 
