@@ -43,26 +43,6 @@ class SharerichForm extends EntityForm {
       '#disabled' => !$sharerich_set->isNew(),
     );
 
-    //@todo delete this
-    $form['create_block'] = array(
-      '#type' => 'checkbox',
-      '#title' => $this->t('Create a block for this set.'),
-      '#description' => '',
-      '#default_value' => $sharerich_set->create_block,
-    );
-
-    $form['block_title'] = array(
-      '#type' => 'textfield',
-      '#title' => $this->t('Title'),
-      '#description' => $this->t('This is the title that appears above the share buttons.'),
-      '#default_value' => !empty($sharerich_set->block_title) ? $sharerich_set->block_title : '',
-      '#states' => array(
-        'visible' => array(
-          ':input[name="create_block"]' => array('checked' => TRUE),
-        ),
-      ),
-    );
-
     $form['services'] = $this->buildOverviewForm();
 
     return $form;

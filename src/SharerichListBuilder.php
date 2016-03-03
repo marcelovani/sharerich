@@ -19,7 +19,6 @@ class SharerichListBuilder extends ConfigEntityListBuilder {
    */
   public function buildHeader() {
     $header['label'] = $this->t('Sharerich');
-    $header['create_block'] = $this->t('Block');
     $header['id'] = $this->t('Machine name');
     return $header + parent::buildHeader();
   }
@@ -29,7 +28,6 @@ class SharerichListBuilder extends ConfigEntityListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $row['label'] = $this->getLabel($entity);
-    $row['create_block'] = 'Yes';//@todo get value
     $row['id'] = $entity->id();
     return $row + parent::buildRow($entity);
   }
