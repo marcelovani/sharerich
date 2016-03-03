@@ -59,6 +59,7 @@ class SharerichForm extends EntityForm {
         $services[$name] = $item;
       }
     }
+    uasort($services, array('Drupal\Component\Utility\SortArray', 'sortByWeightElement'));
     $sharerich_set = $this->entity;
     $sharerich_set->services = $services;
     $status = $sharerich_set->save();
@@ -123,6 +124,7 @@ class SharerichForm extends EntityForm {
   protected function buildOverviewFormRows() {
     $storage = $this->entity->services;
 
+    $weight = 0;
     foreach (sharerich_get_default_services() as $name) {
 
       $form[$name]['#attributes']['class'][] = 'draggable';
@@ -142,7 +144,7 @@ class SharerichForm extends EntityForm {
         '#type' => 'textfield',
         '#title' => $this->t('Weight for @label', array('@label' => $storage[$name]['label'])),
         '#title_display' => 'invisible',
-        '#default_value' => isset($storage[$name]['weight']) ? $storage[$name]['weight'] : 0,
+        '#default_value' => isset($storage[$name]['weight']) ? $storage[$name]['weight'] : $weight++,
         '#attributes' => array('class' => array('item-weight')),
         '#size' => 3,
       );

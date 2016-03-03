@@ -11,7 +11,6 @@ use Drupal\Core\Block\BlockBase;
 
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
 /**
  * Provides a Sharerich block.
  *
@@ -57,7 +56,6 @@ class SharerichBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    //kprint_r($this->configuration);
     $entity_storage = \Drupal::entityTypeManager()->getStorage('sharerich');
 
     if ($sharerich_set = $entity_storage->load($this->configuration['sharerich_set'])) {
@@ -67,7 +65,7 @@ class SharerichBlock extends BlockBase {
           '#attributes' => ['class' => ['sharerich-buttons-wrapper', 'rrssb-buttons-wrapper']],
           '#wrapper_attributes' => ['class' => ['rrssb-' . $name]],
           '#markup' => $service['markup'],
-          '#allowed_tags' => ['a', 'svg', 'path'],
+          '#allowed_tags' => ['a', 'svg', 'path', 'span'],
         ];
       }
     }
@@ -75,12 +73,20 @@ class SharerichBlock extends BlockBase {
       '#theme' => 'item_list',
       '#items' => $services,
       '#type' => 'ul',
-      '#wrapper_attributes' => ['class' => ['sharerich-wrapper']],
+      '#wrapper_attributes' => ['class' => ['sharerich-wrapper', 'share-container']],
       '#attributes' => ['class' => ['sharerich-buttons', 'rrssb-buttons']],
-      '#attached' => array('library' => array('sharerich/rrssb')),
+      '#attached' => array(
+        'library' => array(
+          'sharerich/rrssb',
+          'sharerich/sharerich'
+        )
+      ),
     );
-    //kprint_r(drupal_render($build));
-    return $build;
+
+    // Rendering $build here because render() in \Drupal\Core\Theme\ThemeManager
+    // doesn't add the attributes to the UL if we return the renderable array $build.
+    // This happens on the line that contains "if (isset($info['variables'])) {"/
+    return ['#markup' =>  \Drupal::service('renderer')->render($build)];
   }
 
 }
