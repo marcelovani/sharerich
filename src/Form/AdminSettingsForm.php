@@ -38,20 +38,6 @@ class AdminSettingsForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('sharerich.settings');
-    //@todo delete this
-    $form['profile_name'] = array(
-      '#type' => 'textfield',
-      '#title' => $this->t('Profile name'),
-      '#description' => $this->t('Video sharerich name'),
-      '#default_value' => $config->get('profile_name'),
-    );
-    //@todo delete
-    $form['enable_transcoding'] = array(
-      '#type' => 'checkbox',
-      '#title' => $this->t('Enable transcoding'),
-      '#description' => $this->t('Enables video transcoding'),
-      '#default_value' => $config->get('enable_transcoding'),
-    );
 
     $form['social'] = array(
       '#type' => 'fieldset',
@@ -101,8 +87,6 @@ class AdminSettingsForm extends ConfigFormBase {
     parent::submitForm($form, $form_state);
 
     $this->config('sharerich.settings')
-      ->set('profile_name', $form_state->getValue('profile_name'))//@todo remove
-      ->set('enable_transcoding', $form_state->getValue('enable_transcoding')) //@todo remove
       ->set('sharerich_facebook_app_id', $form_state->getValue('sharerich_facebook_app_id'))
       ->set('sharerich_facebook_site_url', $form_state->getValue('sharerich_facebook_site_url'))
       ->set('sharerich_youtube_username', $form_state->getValue('sharerich_youtube_username'))

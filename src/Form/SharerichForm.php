@@ -43,6 +43,7 @@ class SharerichForm extends EntityForm {
       '#disabled' => !$sharerich_set->isNew(),
     );
 
+    //@todo delete this
     $form['create_block'] = array(
       '#type' => 'checkbox',
       '#title' => $this->t('Create a block for this set.'),

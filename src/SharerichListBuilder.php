@@ -31,7 +31,6 @@ class SharerichListBuilder extends ConfigEntityListBuilder {
     $row['label'] = $this->getLabel($entity);
     $row['create_block'] = 'Yes';//@todo get value
     $row['id'] = $entity->id();
-    // You probably want a few more properties here...
     return $row + parent::buildRow($entity);
   }
 
