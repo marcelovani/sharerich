@@ -1,8 +1,8 @@
 <a href="https://www.youtube.com/user/[sharerich:youtube_username]">
-  <span class="icon">
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="28px" height="28px" viewBox="0 0 28 28" enable-background="new 0 0 28 28" xml:space="preserve">
-          <path d="M27.688,8.512c0-2.268-1.825-4.093-4.106-4.093H4.389c-2.245,0-4.076,1.825-4.076,4.093v10.976 c0,2.268,1.825,4.093,4.076,4.093h19.192c2.274,0,4.106-1.825,4.106-4.093V8.512z M11.263,18.632V8.321l7.817,5.155L11.263,18.632z" />
-      </svg>
+  <span class="rrssb-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewbox="0 0 28 28">
+      <path d="M27.688 8.512c0-2.268-1.825-4.093-4.106-4.093H4.39C2.143 4.42.312 6.243.312 8.51v10.976c0 2.268 1.825 4.093 4.076 4.093h19.19c2.275 0 4.107-1.824 4.107-4.092V8.512zm-16.425 10.12V8.322l7.817 5.154-7.817 5.156z"></path>
+    </svg>
   </span>
-  <span class="text">youtube</span>
+  <span class="rrssb-text">youtube</span>
 </a>
