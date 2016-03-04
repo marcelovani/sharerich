@@ -6,32 +6,14 @@ Customisable Share buttons for social media.
 
 Installation
 ============
-Put the modules into your sites/module/contrib folder;
-
-Make sure rrssb is in the libraries folder.
-If you use drush and make files, it should clone it automatically into /libraries/rrssb
-
-To run the drush command manually, go to the drupal installation folder and run:
-$ drush make --no-core ./sites/all/modules/contrib/sharerich/sharerich.make
-
-The command above will download rrssb into ./sites/all/libraries/rrsb folder.
-
-Alternativelly, you can download rrssb library manually from
-https://github.com/kni-labs/rrssb/releases/tag/v1.6.5 and place it inside ./sites/all/libraries/rrssb folder.
-Sharerich currently supports rrssb version v1.6.5.
-
-Now you can enable Sharerich.
+Put the modules into your sites/module/contrib folder and enable the module.
 Go to the permissions page and set them accordingly.
 
 Configuration
 =============
 - Visit /admin/config/sharerich/settings for general settings;
 - Visit /admin/structure/sharerich and create your own button sets;
-- Go to each content type, open the Sharerich tab and select how many button sets you want to create.
-- Go to each display of the content type and choose which button set to use with each Sharerich field.
-
-Alternativelly, Sharerich creates blocks for each button set (if you tick the box when creating button sets).
-see /admin/structure/block
+- Visit /admin/structure/block and place Sharerich blocks.
 
 Notes
 =====
