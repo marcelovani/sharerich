@@ -82,6 +82,12 @@ class AdminSettingsForm extends ConfigFormBase {
       '#description' => $this->t('Enter your Github username in order for the social button to link to your Github profile.'),
       '#default_value' => $config->get('github_username'),
     );
+    $form['social']['instagram_username'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('Instagram Username'),
+      '#description' => $this->t('Enter your Instagram username in order for the social button to link to your Instagram profile.'),
+      '#default_value' => $config->get('instagram_username'),
+    );
     $form['social']['twitter_user'] = array(
       '#type' => 'textfield',
       '#title' => $this->t('Twitter user'),

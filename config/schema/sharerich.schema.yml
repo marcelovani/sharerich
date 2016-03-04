@@ -12,6 +12,8 @@ sharerich.settings:
       type: string
     github_username:
       type: string
+    instagram_username:
+      type: string
     twitter_user:
       type: string
 

@@ -32,6 +32,10 @@ function sharerich_token_info() {
     'name' => t("Github Username"),
     'description' => t("Used to display the share box."),
   );
+  $token['instagram_username'] = array(
+    'name' => t("Instagram Username"),
+    'description' => t("Used to display the share box."),
+  );
   $token['twitter_user'] = array(
     'name' => t("Twitter ID"),
     'description' => t("Used in Twitter button via @userid."),
@@ -73,6 +77,11 @@ function sharerich_tokens($type, $tokens, array $data, array $options, Bubbleabl
         case 'github_username':
           $value = \Drupal\Component\Utility\Html::escape(\Drupal::config('sharerich.settings')
             ->get('github_username'));
+          break;
+
+        case 'instagram_username':
+          $value = \Drupal\Component\Utility\Html::escape(\Drupal::config('sharerich.settings')
+            ->get('instagram_username'));
           break;
 
         case 'twitter_user':
