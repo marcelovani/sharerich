@@ -73,7 +73,7 @@ class SharerichBlock extends BlockBase {
         $buttons[$name] = [
           '#attributes' => ['class' => ['sharerich-buttons-wrapper', 'rrssb-buttons-wrapper']],
           '#wrapper_attributes' => ['class' => ['rrssb-' . $name]],
-          '#markup' => $service['markup'] . date('H:m:i'),
+          '#markup' => $service['markup'],
           '#allowed_tags' => $allowed_tags,
         ];
       }
