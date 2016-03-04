@@ -1,14 +1,12 @@
-
 sharerich.admin_settings_form:
   path: '/admin/config/sharerich/settings'
   defaults:
     _form: '\Drupal\sharerich\Form\AdminSettingsForm'
     _title: 'Sharerich Configuration'
   requirements:
-    _permission: 'access administration pages'
+    _permission: 'administer sharerich'
   options:
     _admin_route: TRUE
-
 
 # Sharerich routing definition
 entity.sharerich.collection:

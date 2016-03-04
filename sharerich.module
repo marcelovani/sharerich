@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @file
  * Contains sharerich.module..
@@ -12,12 +11,17 @@ use Drupal\Core\Routing\RouteMatchInterface;
  */
 function sharerich_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
-    // Main module help for the sharerich module.
-    case 'help.page.sharerich':
+    case 'sharerich.admin_settings_form':
       $output = '';
-      $output .= '<h3>' . t('About') . '</h3>';
-      $output .= '<p>' . t('Video sharerich manager') . '</p>';
+      $output .= '<p>' . t('You can manage your Sharerich sets at <a href=":menu-settings">Structure > Sharerich</a>.', array(':menu-settings' => \Drupal::url('entity.sharerich.collection'))) . '</p>';
       return $output;
+    break;
+
+    case 'entity.sharerich.collection':
+      $output = '';
+      $output .= '<p>' . t('Global settings are available at the <a href=":menu-settings">configuration page</a>.', array(':menu-settings' => \Drupal::url('sharerich.admin_settings_form'))) . '</p>';
+      return $output;
+    break;
 
     default:
   }
