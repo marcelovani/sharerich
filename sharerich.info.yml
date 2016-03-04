@@ -1,6 +1,9 @@
 name: 'Sharerich'
 project: sharerich
-description: 'Provides an Extra field for Custom Share Buttons'
+description: 'Responsive sharing buttons'
 core: 8.x
 package: 'Sharing'
 type: module
+dependencies:
+- token
+configure: entity.sharerich.collection

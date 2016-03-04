@@ -10,7 +10,10 @@ namespace Drupal\sharerich\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 
 use Drupal\Core\Routing\RedirectDestinationTrait;
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
 /**
  * Provides a Sharerich block.
  *
@@ -59,34 +62,72 @@ class SharerichBlock extends BlockBase {
     $entity_storage = \Drupal::entityTypeManager()->getStorage('sharerich');
 
     if ($sharerich_set = $entity_storage->load($this->configuration['sharerich_set'])) {
-      $services = array();
+      // Get list of allowed tags.
+      $allowed_tags = \Drupal::config('sharerich.settings')->get('allowed_html');
+      $allowed_tags = str_replace(['<', '>'], '', $allowed_tags);
+      $allowed_tags = \Drupal\Component\Utility\Html::escape($allowed_tags);
+      $allowed_tags = explode(' ', $allowed_tags);
+
+      $buttons = array();
       foreach ($sharerich_set->services as $name => $service) {
-        $services[] = [
+        $buttons[$name] = [
           '#attributes' => ['class' => ['sharerich-buttons-wrapper', 'rrssb-buttons-wrapper']],
           '#wrapper_attributes' => ['class' => ['rrssb-' . $name]],
-          '#markup' => $service['markup'],
-          '#allowed_tags' => ['a', 'svg', 'path', 'span'],
+          '#markup' => $service['markup'] . date('H:m:i'),
+          '#allowed_tags' => $allowed_tags,
         ];
       }
-    }
-    $build = array(
-      '#theme' => 'item_list',
-      '#items' => $services,
-      '#type' => 'ul',
-      '#wrapper_attributes' => ['class' => ['sharerich-wrapper', 'share-container']],
-      '#attributes' => ['class' => ['sharerich-buttons', 'rrssb-buttons']],
-      '#attached' => array(
-        'library' => array(
-          'sharerich/rrssb',
-          'sharerich/sharerich'
-        )
-      ),
-    );
 
-    // Rendering $build here because render() in \Drupal\Core\Theme\ThemeManager
-    // doesn't add the attributes to the UL if we return the renderable array $build.
-    // This happens on the line that contains "if (isset($info['variables'])) {"/
-    return ['#markup' =>  \Drupal::service('renderer')->render($build)];
+      $route = \Drupal::request()->attributes->get(RouteObjectInterface::ROUTE_NAME);
+      switch ($route) {
+        case 'entity.node.canonical':
+          $context = ['node' => \Drupal::request()->attributes->get('node')];
+          break;
+
+        case 'entity.taxonomy_term.canonical':
+          $context = ['taxonomy_term' => \Drupal::request()->attributes->get('taxonomy_term')];
+          break;
+
+        case 'entity.user.canonical':
+          $context = ['user' => \Drupal::request()->attributes->get('user')];
+          break;
+
+        default:
+          $context = [];
+      }
+
+      // Allow other modules to alter the buttons markup.
+      \Drupal::moduleHandler()->alter('sharerich_buttons', $buttons, $context);
+
+      // Replace tokens.
+      foreach ($buttons as $name => &$button) {
+        $button['#markup'] = \Drupal::token()->replace($button['#markup'], $context);
+      }
+
+      $build = [
+        '#theme' => 'item_list',
+        '#items' => $buttons,
+        '#type' => 'ul',
+        '#wrapper_attributes' => ['class' => ['sharerich-wrapper', 'share-container']],
+        '#attributes' => ['class' => ['sharerich-buttons', 'rrssb-buttons']],
+        '#attached' => [
+          'library' => [
+            'sharerich/rrssb',
+            'sharerich/sharerich'
+          ]
+        ],
+      ];
+
+      // Rendering $build here because render() in \Drupal\Core\Theme\ThemeManager
+      // doesn't add the attributes to the UL if we return the renderable array $build.
+      // This happens on the line that contains "if (isset($info['variables'])) {"/
+      return [
+        '#markup' => \Drupal::service('renderer')->render($build),
+        '#cache' => [
+          'contexts' => ['url.path']
+        ],
+      ];
+    }
   }
 
 }
