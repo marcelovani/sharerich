@@ -1,0 +1,25 @@
+{
+    "name": "drupal/sharerich",
+    "description": "Responsive sharing buttons.",
+    "keywords": ["sharing", "share", "social", "buttons"],
+    "type": "drupal-module",
+    "homepage": "http://drupal.org/project/sharerich",
+    "authors": [
+        {
+            "name": "Marcelo Vani",
+            "email": "marcellovani@yahoo.co.uk",
+            "homepage": "https://about.me/marcelovani",
+            "role": "Maintainer"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "support": {
+        "issues": "http://drupal.org/project/sharerich",
+        "source": "http://cgit.drupalcode.org/sharerich"
+    },
+    "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "require": { }
+}
