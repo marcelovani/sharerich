@@ -6,6 +6,12 @@
 
 use Drupal\Core\Routing\RouteMatchInterface;
 
+//@todo test with config management
+//@todo use libraries properly with composer.json
+//@todo create defaut sharerich set
+//@todo test module upgrade with schema changes
+//@todo test all sharing buttons
+
 /**
  * Implements hook_help().
  */
