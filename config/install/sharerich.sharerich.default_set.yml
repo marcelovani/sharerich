@@ -5,8 +5,6 @@ _core:
   default_config_hash: JNGztNdeArZ-IRJCrpD3nJ52dgs-9PeSx_UxKRja5bs
 id: default_set
 label: 'Default set'
-create_block: null
-block_title: null
 services:
   email:
     enabled: '1'
