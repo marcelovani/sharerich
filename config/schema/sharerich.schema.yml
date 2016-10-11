@@ -8,12 +8,6 @@ sharerich.sharerich.*:
     label:
       type: label
       label: 'Label'
-    create_block:
-      type: boolean
-      label: 'Create a block for this button set'
-    block_title:
-      type: string
-      label: 'Block title'
     services:
       type: sequence
       label: 'Enabled services'
