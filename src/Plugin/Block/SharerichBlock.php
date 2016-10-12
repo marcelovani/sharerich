@@ -69,7 +69,7 @@ class SharerichBlock extends BlockBase {
       $allowed_tags = explode(' ', $allowed_tags);
 
       $buttons = array();
-      foreach ($sharerich_set->services as $name => $service) {
+      foreach ($sharerich_set->getServices() as $name => $service) {
         $buttons[$name] = [
           '#attributes' => ['class' => ['sharerich-buttons-wrapper', 'rrssb-buttons-wrapper']],
           '#wrapper_attributes' => ['class' => ['rrssb-' . $name]],
