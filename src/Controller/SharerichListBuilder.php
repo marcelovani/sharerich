@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\sharerich\sharerichListBuilder.
+ * Contains \Drupal\sharerich\SharerichListBuilder.
  */
 
 namespace Drupal\sharerich\Controller;
@@ -11,14 +11,14 @@ use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Provides a listing of sharerich optionset entities.
+ * Provides a listing of Sharerich entities.
  */
-class sharerichListBuilder extends ConfigEntityListBuilder {
+class SharerichListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header['label'] = $this->t('Name');
+    $header['label'] = $this->t('Sharerich');
     $header['id'] = $this->t('Machine name');
     return $header + parent::buildHeader();
   }
@@ -27,21 +27,9 @@ class sharerichListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    $row['label'] = $entity->label();
+    $row['label'] = $this->getLabel($entity);
     $row['id'] = $entity->id();
     return $row + parent::buildRow($entity);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDefaultOperations(EntityInterface $entity) {
-    $ops = parent::getDefaultOperations($entity);
-    // Do not allow deletion of the default configuration.
-    if ($entity->id() == 'default') {
-      unset($ops['delete']);
-    }
-    return $ops;
   }
 
 }

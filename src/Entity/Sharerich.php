@@ -17,7 +17,7 @@ use Drupal\sharerich\SharerichInterface;
  *   id = "sharerich",
  *   label = @Translation("Sharerich set"),
  *   handlers = {
- *     "list_builder" = "Drupal\sharerich\SharerichListBuilder",
+ *     "list_builder" = "Drupal\sharerich\Controller\SharerichListBuilder",
  *     "form" = {
  *       "add" = "Drupal\sharerich\Form\SharerichForm",
  *       "edit" = "Drupal\sharerich\Form\SharerichForm",
