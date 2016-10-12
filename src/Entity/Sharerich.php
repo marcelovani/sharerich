@@ -24,18 +24,22 @@ use Drupal\sharerich\SharerichInterface;
  *       "delete" = "Drupal\sharerich\Form\SharerichDeleteForm"
  *     }
  *   },
- *   config_prefix = "sharerich",
+ *   config_prefix = "set",
  *   admin_permission = "administer sharerich",
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
- *     "uuid" = "uuid"
  *   },
  *   links = {
  *     "canonical" = "/admin/structure/sharerich/{sharerich}",
  *     "edit-form" = "/admin/structure/sharerich/{sharerich}/edit",
  *     "delete-form" = "/admin/structure/sharerich/{sharerich}/delete",
  *     "collection" = "/admin/structure/visibility_group"
+ *   },
+ *   config_export = {
+ *     "id",
+ *     "label",
+ *     "services",
  *   }
  * )
  */
@@ -54,4 +58,17 @@ class Sharerich extends ConfigEntityBase implements SharerichInterface {
    */
   protected $label;
 
+  /**
+   * The Sharerich services.
+   *
+   * @var array
+   */
+  protected $services = array();
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getServices() {
+    return $this->services;
+  }
 }

@@ -1,6 +1,6 @@
-sharerich.sharerich.*:
+sharerich.set.*:
   type: config_entity
-  label: 'Sharerich config'
+  label: 'Sharerich set'
   mapping:
     id:
       type: string
@@ -11,5 +11,3 @@ sharerich.sharerich.*:
     services:
       type: sequence
       label: 'Enabled services'
-    uuid:
-      type: string

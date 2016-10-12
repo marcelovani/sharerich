@@ -122,7 +122,7 @@ class SharerichForm extends EntityForm {
    *   The form containing services.
    */
   protected function buildOverviewFormRows() {
-    $storage = $this->entity->services;
+    $storage = $this->entity->getServices();
 
     $weight = 0;
     foreach (sharerich_get_default_services() as $name) {

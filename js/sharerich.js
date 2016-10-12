@@ -1,6 +1,6 @@
 /**
  * @file
- * Sharerich keypad.
+ * Sharerich.
  */
 
 (function ($, Drupal, drupalSettings) {

@@ -1,10 +1,5 @@
-langcode: en
-status: true
-dependencies: {  }
-_core:
-  default_config_hash: JNGztNdeArZ-IRJCrpD3nJ52dgs-9PeSx_UxKRja5bs
-id: default_set
-label: 'Default set'
+id: default
+label: 'Default'
 services:
   email:
     enabled: '1'
