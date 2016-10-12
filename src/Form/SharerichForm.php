@@ -61,7 +61,7 @@ class SharerichForm extends EntityForm {
     }
     uasort($services, array('Drupal\Component\Utility\SortArray', 'sortByWeightElement'));
     $sharerich_set = $this->entity;
-    $sharerich_set->services = $services;
+    $sharerich_set->setServices($services);
     $status = $sharerich_set->save();
 
     switch ($status) {

@@ -71,4 +71,11 @@ class Sharerich extends ConfigEntityBase implements SharerichInterface {
   public function getServices() {
     return $this->services;
   }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setServices($services) {
+    $this->services = $services;
+  }
 }
