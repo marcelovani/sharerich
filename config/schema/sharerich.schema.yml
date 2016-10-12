@@ -11,3 +11,7 @@ sharerich.set.*:
     services:
       type: sequence
       label: 'Enabled services'
+      sequence:
+        - type: sequence
+          sequence:
+            - type: string
