@@ -15,3 +15,11 @@ sharerich.set.*:
         - type: sequence
           sequence:
             - type: string
+
+block.settings.sharerich:
+  type: block_settings
+  label: 'Sharerich block'
+  mapping:
+    sharerich_set:
+      type: string
+      label: 'Sharerich set'
