@@ -18,7 +18,7 @@ use Drupal\Core\Entity\EntityTypeInterface;
  * Provides a Sharerich block.
  *
  * @Block(
- *   id = "sharerich_block",
+ *   id = "sharerich",
  *   admin_label = @Translation("Sharerich"),
  * )
  */
@@ -52,7 +52,7 @@ class SharerichBlock extends BlockBase {
    * Overrides \Drupal\block\BlockBase::blockSubmit().
    */
   public function blockSubmit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
-    $this->setConfigurationValue('sharerich_set', $form_state->getValue('sharerich_set'));
+    $this->configuration['sharerich_set'] = $form_state->getValue('sharerich_set');
   }
 
   /**

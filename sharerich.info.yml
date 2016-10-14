@@ -6,4 +6,5 @@ package: 'Sharing'
 type: module
 dependencies:
 - token
+- block
 configure: entity.sharerich.collection
