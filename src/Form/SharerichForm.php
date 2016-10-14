@@ -27,10 +27,10 @@ class SharerichForm extends EntityForm {
 
     $form['label'] = array(
       '#type' => 'textfield',
-      '#title' => $this->t('Label'),
+      '#title' => $this->t('Name'),
       '#maxlength' => 255,
       '#default_value' => $sharerich_set->label(),
-      '#description' => $this->t("Label for the Sharerich set."),
+      '#description' => $this->t("Name for the Sharerich set."),
       '#required' => TRUE,
     );
 
@@ -66,14 +66,14 @@ class SharerichForm extends EntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created the %label Sharerich.', [
-          '%label' => $sharerich_set->label(),
+        drupal_set_message($this->t('Created the %id Sharerich.', [
+          '%id' => $sharerich_set->id(),
         ]));
         break;
 
       default:
-        drupal_set_message($this->t('Saved the %label Sharerich.', [
-          '%label' => $sharerich_set->label(),
+        drupal_set_message($this->t('Saved the %id Sharerich.', [
+          '%id' => $sharerich_set->id(),
         ]));
     }
     $form_state->setRedirectUrl($sharerich_set->urlInfo('collection'));
@@ -135,14 +135,14 @@ class SharerichForm extends EntityForm {
 
       $form[$name]['enabled'] = array(
         '#type' => 'checkbox',
-        '#title' => $this->t('Enable @label service', array('@label' => $storage[$name]['label'])),
+        '#title' => '',
         '#title_display' => 'invisible',
         '#default_value' => isset($storage[$name]['enabled']) ? $storage[$name]['enabled'] : FALSE,
       );
 
       $form[$name]['weight'] = array(
         '#type' => 'textfield',
-        '#title' => $this->t('Weight for @label', array('@label' => $storage[$name]['label'])),
+        '#title' => '',
         '#title_display' => 'invisible',
         '#default_value' => isset($storage[$name]['weight']) ? $storage[$name]['weight'] : $weight++,
         '#attributes' => array('class' => array('item-weight')),
