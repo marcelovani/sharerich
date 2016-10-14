@@ -8,7 +8,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 
 //@todo test with config management
 //@todo use libraries properly with composer.json
-//@todo create defaut sharerich set
 //@todo test module upgrade with schema changes
 //@todo test all sharing buttons
 
@@ -21,13 +20,13 @@ function sharerich_help($route_name, RouteMatchInterface $route_match) {
       $output = '';
       $output .= '<p>' . t('You can manage your Sharerich sets at <a href=":menu-settings">Structure > Sharerich</a>.', array(':menu-settings' => \Drupal::url('entity.sharerich.collection'))) . '</p>';
       return $output;
-    break;
+      break;
 
     case 'entity.sharerich.collection':
       $output = '';
       $output .= '<p>' . t('Global settings are available at the <a href=":menu-settings">configuration page</a>.', array(':menu-settings' => \Drupal::url('sharerich.admin_settings_form'))) . '</p>';
       return $output;
-    break;
+      break;
 
     default:
   }
@@ -49,7 +48,7 @@ function sharerich_theme() {
 function sharerich_get_default_services() {
   $dir = drupal_get_path('module', 'sharerich') . '/services';
   $list = file_scan_directory($dir, '/.inc/', array(), 0);
-  return array_map(function($service) {
+  return array_map(function ($service) {
     return $service->name;
   }, $list);
 }
@@ -63,5 +62,6 @@ function sharerich_load_default_service($service_name) {
   if (file_exists($service_name)) {
     return file_get_contents($service_name);
   }
+
   return FALSE;
 }
