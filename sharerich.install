@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the sharerich module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function sharerich_install() {
+  $default_theme = \Drupal::config('system.theme')->get('default');
+
+  // Create default block.
+  entity_create('block', array(
+    'id' => 'sharerich_block',
+    'label' => 'Share this',
+    'type' => 'sharerich',
+    'theme' => $default_theme,
+    'region' => 'content',
+    'weight' => 0,
+    'provider' => NULL,
+    'plugin' => 'sharerich',
+    'settings' => array(
+      'id' => 'sharerich_block',
+      'label' => 'Share this',
+      'provider' => 'sharerich',
+      'label_display' => 'visible',
+      'sharerich_set' => 'default',
+    )
+  ))->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function sharerich_uninstall() {
+
+}
