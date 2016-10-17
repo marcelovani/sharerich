@@ -10,6 +10,7 @@ namespace Drupal\sharerich\Form;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Cache\Cache;
 
 /**
  * Class SharerichForm.
@@ -72,10 +73,14 @@ class SharerichForm extends EntityForm {
         break;
 
       default:
-        drupal_set_message($this->t('Saved the %id Sharerich.', [
+        drupal_set_message($this->t('Updated the %id Sharerich.', [
           '%id' => $sharerich_set->id(),
         ]));
+        // Clear block cache.
+        Cache::invalidateTags(array('block_view'));
+
     }
+    // Redirect.
     $form_state->setRedirectUrl($sharerich_set->urlInfo('collection'));
   }
 
