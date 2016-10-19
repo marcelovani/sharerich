@@ -10,6 +10,8 @@ namespace Drupal\sharerich\Form;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Xss;
+use Drupal\Core\Cache\Cache;
+
 /**
  * Class AdminSettingsForm.
  *
@@ -116,9 +118,13 @@ class AdminSettingsForm extends ConfigFormBase {
       ->set('facebook_app_id', $form_state->getValue('facebook_app_id'))
       ->set('facebook_site_url', $form_state->getValue('facebook_site_url'))
       ->set('youtube_username', $form_state->getValue('youtube_username'))
+      ->set('instagram_username', $form_state->getValue('instagram_username'))
       ->set('github_username', $form_state->getValue('github_username'))
       ->set('twitter_user', $form_state->getValue('twitter_user'))
       ->save();
+
+    // Clear block cache.
+    Cache::invalidateTags(array('block_view'));
   }
 
 }
