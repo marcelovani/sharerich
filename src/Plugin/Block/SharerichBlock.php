@@ -99,11 +99,6 @@ class SharerichBlock extends BlockBase {
       // Allow other modules to alter the buttons markup.
       \Drupal::moduleHandler()->alter('sharerich_buttons', $buttons, $context);
 
-      // Replace tokens.
-      foreach ($buttons as $name => &$button) {
-        $button['#markup'] = \Drupal::token()->replace($button['#markup'], $context);
-      }
-
       $build = [
         '#theme' => 'item_list',
         '#items' => $buttons,
@@ -121,8 +116,14 @@ class SharerichBlock extends BlockBase {
       // Rendering $build here because render() in \Drupal\Core\Theme\ThemeManager
       // doesn't add the attributes to the UL if we return the renderable array $build.
       // This happens on the line that contains "if (isset($info['variables'])) {"/
+      $markup = \Drupal::service('renderer')->render($build);
+
+      // Replace tokens.
+      $markup = \Drupal::token()->replace($markup, $context);
+
       return [
-        '#markup' => \Drupal::service('renderer')->render($build),
+        '#markup' => $markup,
+        '#allowed_tags' => $allowed_tags,
         '#cache' => [
           'contexts' => ['url.path']
         ],
