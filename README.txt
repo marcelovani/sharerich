@@ -14,6 +14,14 @@ Configuration
 - Visit /admin/config/sharerich/settings for general settings;
 - Visit /admin/structure/sharerich and create your own button sets;
 - Visit /admin/structure/block and place Sharerich blocks.
+- Out of the box, Drupal doesn't allow the whatsapp and javascript protocols. If you want to use the
+  whatsapp or print button, you need to add entries to services.yml (On the same folder where the
+  site's settings.php is). Add the following entries.
+
+  parameters:
+    filter_protocols:
+      - whatsapp
+      - javascript
 
 Notes
 =====
@@ -45,3 +53,4 @@ Notes
 TODO
 ====
 - google_analytics_et (If the module is enabled, GA event tracking will be added to the share buttons)
+- Add contextual link on the blocks, linking to admin/structure/sharerich/{id}
