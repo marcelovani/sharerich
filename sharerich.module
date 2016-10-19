@@ -6,8 +6,6 @@
 
 use Drupal\Core\Routing\RouteMatchInterface;
 
-//@todo test all sharing buttons
-
 /**
  * Implements hook_help().
  */
