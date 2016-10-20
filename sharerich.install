@@ -27,6 +27,8 @@ function sharerich_install() {
       'provider' => 'sharerich',
       'label_display' => 'visible',
       'sharerich_set' => 'default',
+      'orientation' => 'vertical',
+      'sticky' => TRUE,
     )
   ))->save();
 }

@@ -4,6 +4,9 @@ sharerich:
     js/sharerich.js: {}
   dependencies:
     - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings
   css:
     theme:
       css/sharerich.css: {}

@@ -8,12 +8,8 @@
 namespace Drupal\sharerich\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-
 use Drupal\Core\Routing\RedirectDestinationTrait;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
 /**
  * Provides a Sharerich block.
  *
@@ -45,6 +41,26 @@ class SharerichBlock extends BlockBase {
       '#default_value' => isset($configuration['sharerich_set']) ? $configuration['sharerich_set'] : array(),
     );
 
+    $form['orientation'] = array(
+      '#type' => 'select',
+      '#title' => t('Orientation'),
+      '#options' => array('horizontal' => t('Horizontal'), 'vertical' => t('Vertical')),
+      '#default_value' => isset($configuration['orientation']) ? $configuration['orientation'] : array(),
+      '#description' => t('If you set to vertical and place the block on the top of the main content area, it will float on the side.'),
+    );
+
+    $form['sticky'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Sticky'),
+      '#default_value' => $configuration['sticky'],
+      '#description' => t('Stick to the top when scrolling.'),
+      '#states' => array(
+        'visible' => array(
+          ':input[name="settings[orientation]"]' => array('value' => 'vertical'),
+        ),
+      ),
+    );
+
     return $form;
   }
 
@@ -53,6 +69,8 @@ class SharerichBlock extends BlockBase {
    */
   public function blockSubmit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
     $this->configuration['sharerich_set'] = $form_state->getValue('sharerich_set');
+    $this->configuration['orientation'] = $form_state->getValue('orientation');
+    $this->configuration['sticky'] = $form_state->getValue('sticky');
   }
 
   /**
@@ -103,7 +121,15 @@ class SharerichBlock extends BlockBase {
         '#theme' => 'item_list',
         '#items' => $buttons,
         '#type' => 'ul',
-        '#wrapper_attributes' => ['class' => ['sharerich-wrapper', 'share-container']],
+        '#wrapper_attributes' => [
+          'class' => [
+            'sharerich-wrapper',
+            'share-container',
+            $this->configuration['sharerich_set'],
+            $this->configuration['orientation'],
+            ($this->configuration['sticky']) ? 'sticky' : '',
+          ]
+        ],
         '#attributes' => ['class' => ['sharerich-buttons', 'rrssb-buttons']],
         '#attached' => [
           'library' => [

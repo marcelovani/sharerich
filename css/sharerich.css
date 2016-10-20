@@ -1,3 +1,11 @@
+.sharerich-buttons a {
+  border-bottom: transparent;
+}
+
+.sharerich-wrapper {
+  z-index: 500;
+}
+
 .sharerich-form .service-disabled {
     color: #5e594f;
 }
@@ -19,3 +27,77 @@
     background-color: #65BC54;
 }
 
+/*---- Vertical -----*/
+.sharerich-wrapper.vertical {
+  position: absolute;
+  top: 80px;
+  width: 45px;
+}
+
+@media screen and (min-width: 47.5em) {
+  .sharerich-wrapper.vertical {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-left: -66px;
+    width: 45px;
+  }
+}
+
+@media screen and (min-width: 47.5em) {
+  .sharerich-wrapper.vertical ul.sharerich-buttons {
+    overflow: visible;
+    position: static;
+  }
+}
+
+.sharerich-wrapper.vertical > ul.sharerich-buttons {
+  height: auto;
+  position: relative;
+  right: -50%;
+  overflow: visible;
+  margin-bottom: 0;
+}
+
+@media screen and (min-width: 47.5em) {
+  .sharerich-wrapper.vertical ul.sharerich-buttons li {
+    float: none;
+    width: 44px !important;
+    height: 44px;
+    margin-bottom: 0.5em;
+    margin-right: 0;
+    padding: 0;
+  }
+}
+
+.sharerich-wrapper.vertical > ul.sharerich-buttons > li {
+  padding: 0;
+}
+
+.sharerich-wrapper.vertical > ul.sharerich-buttons > li > a {
+  height: 44px;
+  width: 44px;
+  padding: 0;
+}
+
+.sharerich-wrapper.vertical > ul.sharerich-buttons > li > a > .icon {
+  padding-top: 12px;
+  margin: 0 auto;
+  position: relative;
+  left: auto;
+  top: auto;
+  width: 100%;
+}
+
+.sharerich-wrapper.vertical > ul.sharerich-buttons > li > a > .text {
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+.sharerich-wrapper.vertical.stick {
+  position: fixed;
+  top: 35px;
+}

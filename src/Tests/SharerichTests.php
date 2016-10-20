@@ -109,6 +109,9 @@ class SharerichTests extends WebTestBase {
     $text = $this->xpath('//div[@id="block-sharerich-block"]/h2/text()')[0][0];
     $this->assertEqual($text, t('Share this'), 'The title of sharerich block is correct');
 
+    $text = $this->xpath('//div[contains(@class, "sharerich-wrapper") and contains(@class, "vertical")  and contains(@class, "sticky")]');
+    $this->assertTrue(isset($text), 'Found a sticky sharerich block');
+
     foreach ($this->services as $item) {
       $text = $this->xpath('//div[@id="block-sharerich-block"]//ul/li[@class="rrssb-' . $item . '"]//span[@class="rrssb-text"]/text()')[0][0];
       $this->assertEqual($text, $item, t('The text of :item button is correct', array(':item' => $item)));

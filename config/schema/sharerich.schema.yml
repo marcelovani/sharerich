@@ -23,3 +23,9 @@ block.settings.sharerich:
     sharerich_set:
       type: string
       label: 'Sharerich set'
+    orientation:
+      type: string
+      label: 'Orientation'
+    sticky:
+      type: boolean
+      label: 'Stick to the top when scrolling'
