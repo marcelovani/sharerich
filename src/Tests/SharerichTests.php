@@ -38,7 +38,7 @@ class SharerichTests extends WebTestBase {
     parent::setUp();
 
     // Services to test.
-    $this->services = ['facebook', 'email', 'instagram', 'twitter'];
+    $this->services = ['facebook', 'email', 'tumblr', 'twitter'];
 
     // Create admin user.
     $this->adminUser = $this->drupalCreateUser(array(
@@ -67,18 +67,17 @@ class SharerichTests extends WebTestBase {
     // Test that the imported set is correct.
     $element = $this->xpath('//input[@type="text" and @id="edit-label" and @value="Default"]');
     $this->assertTrue(count($element) === 1, 'The label is correct.');
-
+;
     foreach ($this->services as $item) {
       // Assert that the checkboxes are ticked.
       $element = $this->xpath('//input[@type="checkbox" and @name="services[' . $item . '][enabled]" and @checked="checked"]');
       $this->assertTrue(count($element) === 1, t('The :item is checked.', array(':item' => ucfirst($item))));
 
-      // Assert that the widget is correct.
-      $value = (string) $this->xpath('//textarea[@id="edit-services-' . $item . '-markup"]')[0];
-      $widget = sharerich_load_default_service($item);
-      // Convert line breaks.
-      $actual = preg_replace("/(?<=[^\r]|^)\n/", "\r\n", $value);
-      $expected = preg_replace("/(?<=[^\r]|^)\n/", "\r\n", $widget);
+      $actual = (string) $this->xpath('//textarea[@name="services[' . $item . '][markup]"]')[0];
+      $expected = (string) $this->xpath('//input[@type="hidden"][@name="services[' . $item . '][default_markup]"]/@value')[0];
+      // Normalize strings.
+      $actual=preg_replace('/(\r\n|\r|\n|\s|\t)/s'," ",$actual);
+      $expected=preg_replace('/(\r\n|\r|\n|\s|\t)/s'," ",$expected);
       $this->assertTrue($actual == $expected, t('The :item widget is correct.', array(':item' => ucfirst($item))));
     }
   }
