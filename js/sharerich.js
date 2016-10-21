@@ -31,6 +31,15 @@
 			}
 		});
 
+		// Workaround for allowed protocols limitation.
+		var button = $('.sharerich-buttons .rrssb-print a');
+		var _href = button.attr('href');
+		button.attr('href', (_href.substring(0, 6) == 'window' ? "javascript:" + _href : _href));
+
+		var button = $('.sharerich-buttons .rrssb-whatsapp a');
+		var _href = button.attr('href');
+		button.attr('href', (_href.substring(0, 6) == '//send' ? "whatsapp:" + _href : _href));
+
 	})
 
 })(jQuery, Drupal, drupalSettings);
