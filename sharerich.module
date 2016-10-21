@@ -106,6 +106,7 @@ function sharerich_allowed_tags() {
  */
 function _sharerich_get_token_data() {
   $route = \Drupal::request()->attributes->get(RouteObjectInterface::ROUTE_NAME);
+
   switch ($route) {
     case 'entity.node.canonical':
       $data = ['node' => \Drupal::request()->attributes->get('node')];
@@ -124,4 +125,18 @@ function _sharerich_get_token_data() {
   }
 
   return $data;
+}
+
+/**
+ * Implements hook_block_view_alter().
+ *
+ * @param array $build
+ * @param \Drupal\Core\Block\BlockPluginInterface $block
+ */
+function sharerich_block_view_alter(array &$build, \Drupal\Core\Block\BlockPluginInterface $block) {
+  if ($block->getPluginId() == 'sharerich') {
+    $build['#contextual_links']['sharerich'] = array(
+      'route_parameters' => array('sharerich' => $block->getConfiguration()['sharerich_set']),
+    );
+  }
 }
