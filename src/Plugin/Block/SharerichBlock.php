@@ -117,9 +117,18 @@ class SharerichBlock extends BlockBase {
       // Allow other modules to alter the buttons markup.
       \Drupal::moduleHandler()->alter('sharerich_buttons', $buttons, $context);
 
-      $build = [
+      $bb[] = array(
+        'data' => t('Colour: !c', array('!c' => 'White')),
+        'class' => array('exterior-colour'),
+      );
+      $bb[] = array(
+        'data' => t('Colour: !c', array('!c' => 'Blue')),
+        'class' => array('exterior-colour'),
+      );
+
+      $list = [
         '#theme' => 'item_list',
-        '#items' => $buttons,
+        '#items' => $bb,
         '#type' => 'ul',
         '#wrapper_attributes' => [
           'class' => [
@@ -142,17 +151,23 @@ class SharerichBlock extends BlockBase {
       // Rendering $build here because render() in \Drupal\Core\Theme\ThemeManager
       // doesn't add the attributes to the UL if we return the renderable array $build.
       // This happens on the line that contains "if (isset($info['variables'])) {"/
-      $markup = \Drupal::service('renderer')->render($build);
+      $markup = \Drupal::service('renderer')->render($list);
+
+      $build['content'] = array(
+        '#theme' => 'sharerich',
+        '#buttons' => $markup,
+      );
+return $build;
 
       // Replace tokens.
       $markup = \Drupal::token()->replace($markup, $context);
 
       return [
-        '#markup' => $markup,
+        '#items_list' => $build,
         '#allowed_tags' => $allowed_tags,
-        '#cache' => [
-          'contexts' => ['url.path']
-        ],
+//        '#cache' => [
+//          'contexts' => ['url.path']
+//        ],
       ];
     }
   }

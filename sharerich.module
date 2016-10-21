@@ -31,9 +31,14 @@ function sharerich_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_theme().
  */
 function sharerich_theme() {
-  $theme = [];
-
-  return $theme;
+  return array(
+    'sharerich' => array(
+      'variables' => array(
+        'buttons' => '',
+      ),
+      'template' => 'sharerich',
+    ),
+  );
 }
 
 /**
