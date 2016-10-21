@@ -6,6 +6,7 @@
 
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\Element;
+use Drupal\Component\Render\PlainTextOutput;
 
 /**
  * Implements hook_token_info().
@@ -90,34 +91,42 @@ function sharerich_tokens($type, $tokens, array $data, array $options, Bubbleabl
           break;
 
         case 'url':
-          if (isset($data['node']) && !empty($data['node'])) {
-            $value = \Drupal::token()->replace('[node:url]', $data, $options);
+          // Token fallback.
+          $tokens = ['[node:url]', '[term:url]', '[current-page:url]', '[site:url]'];
+          foreach ($tokens as $token) {
+            $value = \Drupal::token()->replace($token, $data, ['clear' => TRUE]);
+            if (!empty($value)) {
+              $value = rawurlencode($value);
+              break;
+            }
           }
-          else {
-            $value = \Drupal::token()->replace('[current-page:url]');
-          }
-          $value = rawurlencode($value);
           break;
 
         case 'title':
-          if (isset($data['node']) && !empty($data['node'])) {
-            $value = \Drupal::token()->replace('[node:title]', $data, $options);
+          // Token fallback.
+          $tokens = ['[node:title]', '[term:name]', '[current-page:title]', '[site:name]'];
+          foreach ($tokens as $token) {
+            $value = \Drupal::token()->replace($token, $data, ['clear' => TRUE]);
+            if (!empty($value)) {
+              $value = rawurlencode(PlainTextOutput::renderFromHtml(htmlspecialchars_decode($value)));
+              break;
+            }
           }
-          else {
-            $value = \Drupal::token()->replace('[current-page:title]');
-          }
-          $value = rawurlencode(\Drupal\Component\Utility\Html::decodeEntities($value));
           break;
 
         case 'summary':
-          if (isset($data['node']) && !empty($data['node'])) {
-            $value = \Drupal::token()->replace('[node:summary]', $data, $options);
+        case 'description':
+          // Token fallback.
+          $tokens = ['[node:summary]', '[term:description]', '[current-page:title]', '[site:slogan]'];
+          foreach ($tokens as $token) {
+            $value = \Drupal::token()->replace($token, $data, ['clear' => TRUE]);
+            if (!empty($value)) {
+              $value = rawurlencode(PlainTextOutput::renderFromHtml(htmlspecialchars_decode($value)));
+              break;
+            }
           }
-          else {
-            $value = \Drupal::token()->replace('[site:name]');
-          }
-          $value = rawurlencode(\Drupal\Component\Utility\Html::decodeEntities($value));
           break;
+
       }
       $replacements[$original] = $value;
     }

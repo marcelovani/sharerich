@@ -118,3 +118,5 @@ class SharerichTests extends WebTestBase {
     }
   }
 }
+//@todo: Write test for tokens
+//@todo: Write text for contextual link
