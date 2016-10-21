@@ -28,14 +28,14 @@
 }
 
 /*---- Vertical -----*/
-.sharerich-wrapper.vertical {
+.sharerich-wrapper.sharerich-vertical {
   position: absolute;
   top: 80px;
   width: 45px;
 }
 
 @media screen and (min-width: 47.5em) {
-  .sharerich-wrapper.vertical {
+  .sharerich-wrapper.sharerich-vertical {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -45,13 +45,13 @@
 }
 
 @media screen and (min-width: 47.5em) {
-  .sharerich-wrapper.vertical ul.sharerich-buttons {
+  .sharerich-wrapper.sharerich-vertical ul.sharerich-buttons {
     overflow: visible;
     position: static;
   }
 }
 
-.sharerich-wrapper.vertical > ul.sharerich-buttons {
+.sharerich-wrapper.sharerich-vertical > ul.sharerich-buttons {
   height: auto;
   position: relative;
   right: -50%;
@@ -60,7 +60,7 @@
 }
 
 @media screen and (min-width: 47.5em) {
-  .sharerich-wrapper.vertical ul.sharerich-buttons li {
+  .sharerich-wrapper.sharerich-vertical ul.sharerich-buttons li {
     float: none;
     width: 44px !important;
     height: 44px;
@@ -70,17 +70,17 @@
   }
 }
 
-.sharerich-wrapper.vertical > ul.sharerich-buttons > li {
+.sharerich-wrapper.sharerich-vertical > ul.sharerich-buttons > li {
   padding: 0;
 }
 
-.sharerich-wrapper.vertical > ul.sharerich-buttons > li > a {
+.sharerich-wrapper.sharerich-vertical > ul.sharerich-buttons > li > a {
   height: 44px;
   width: 44px;
   padding: 0;
 }
 
-.sharerich-wrapper.vertical > ul.sharerich-buttons > li > a > .icon {
+.sharerich-wrapper.sharerich-vertical > ul.sharerich-buttons > li > a > .icon {
   padding-top: 12px;
   margin: 0 auto;
   position: relative;
@@ -89,7 +89,7 @@
   width: 100%;
 }
 
-.sharerich-wrapper.vertical > ul.sharerich-buttons > li > a > .text {
+.sharerich-wrapper.sharerich-vertical > ul.sharerich-buttons > li > a > .text {
   position: absolute;
   height: 1px;
   width: 1px;
@@ -97,7 +97,7 @@
   clip: rect(1px, 1px, 1px, 1px);
 }
 
-.sharerich-wrapper.vertical.stick {
+.sharerich-wrapper.sharerich-vertical.stick {
   position: fixed;
   top: 35px;
 }

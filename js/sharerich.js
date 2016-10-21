@@ -20,7 +20,7 @@
 
 		// Sticky.
 		$(window).scroll(function () {
-			var target = $('.sharerich-wrapper.vertical.sticky');
+			var target = $('.sharerich-wrapper.sharerich-vertical.sharerich-sticky');
 			// Find the parent container.
 			var container = target.parent();
 			if (container.length) {

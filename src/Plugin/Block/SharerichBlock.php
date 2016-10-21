@@ -105,9 +105,9 @@ class SharerichBlock extends BlockBase {
           'class' => [
             'sharerich-wrapper',
             'share-container',
-            $this->configuration['sharerich_set'],
-            $this->configuration['orientation'],
-            ($this->configuration['sticky']) ? 'sticky' : '',
+            'sharerich-' . $this->configuration['sharerich_set'],
+            'sharerich-' . $this->configuration['orientation'],
+            ($this->configuration['sticky']) ? 'sharerich-sticky' : '',
           ]
         ],
         '#attributes' => ['class' => ['sharerich-buttons', 'rrssb-buttons']],
