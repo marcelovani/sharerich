@@ -9,7 +9,6 @@ namespace Drupal\sharerich\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Routing\RedirectDestinationTrait;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 /**
  * Provides a Sharerich block.
  *
@@ -80,55 +79,27 @@ class SharerichBlock extends BlockBase {
     $entity_storage = \Drupal::entityTypeManager()->getStorage('sharerich');
 
     if ($sharerich_set = $entity_storage->load($this->configuration['sharerich_set'])) {
-      // Get list of allowed tags.
-      $allowed_tags = \Drupal::config('sharerich.settings')->get('allowed_html');
-      $allowed_tags = str_replace(['<', '>'], '', $allowed_tags);
-      $allowed_tags = \Drupal\Component\Utility\Html::escape($allowed_tags);
-      $allowed_tags = explode(' ', $allowed_tags);
-
       $buttons = array();
       foreach ($sharerich_set->getServices() as $name => $service) {
         $buttons[$name] = [
           '#attributes' => ['class' => ['sharerich-buttons-wrapper', 'rrssb-buttons-wrapper']],
           '#wrapper_attributes' => ['class' => ['rrssb-' . $name]],
           '#markup' => $service['markup'],
-          '#allowed_tags' => $allowed_tags,
+          '#allowed_tags' => sharerich_allowed_tags(),
         ];
       }
-
-      $route = \Drupal::request()->attributes->get(RouteObjectInterface::ROUTE_NAME);
-      switch ($route) {
-        case 'entity.node.canonical':
-          $context = ['node' => \Drupal::request()->attributes->get('node')];
-          break;
-
-        case 'entity.taxonomy_term.canonical':
-          $context = ['taxonomy_term' => \Drupal::request()->attributes->get('taxonomy_term')];
-          break;
-
-        case 'entity.user.canonical':
-          $context = ['user' => \Drupal::request()->attributes->get('user')];
-          break;
-
-        default:
-          $context = [];
-      }
-
-      // Allow other modules to alter the buttons markup.
+      // Allow other modules to alter the buttons before they are rendered.
+      $context = _sharerich_get_token_data();
       \Drupal::moduleHandler()->alter('sharerich_buttons', $buttons, $context);
 
-      $bb[] = array(
-        'data' => t('Colour: !c', array('!c' => 'White')),
-        'class' => array('exterior-colour'),
-      );
-      $bb[] = array(
-        'data' => t('Colour: !c', array('!c' => 'Blue')),
-        'class' => array('exterior-colour'),
-      );
+      // Render tokens.
+      foreach ($buttons as &$button) {
+        $button['#markup'] = \Drupal::token()->replace($button['#markup'], _sharerich_get_token_data());
+      }
 
-      $list = [
+      $item_list = [
         '#theme' => 'item_list',
-        '#items' => $bb,
+        '#items' => $buttons,
         '#type' => 'ul',
         '#wrapper_attributes' => [
           'class' => [
@@ -148,28 +119,15 @@ class SharerichBlock extends BlockBase {
         ],
       ];
 
-      // Rendering $build here because render() in \Drupal\Core\Theme\ThemeManager
-      // doesn't add the attributes to the UL if we return the renderable array $build.
-      // This happens on the line that contains "if (isset($info['variables'])) {"/
-      $markup = \Drupal::service('renderer')->render($list);
-
-      $build['content'] = array(
+      $build['content'] = [
         '#theme' => 'sharerich',
-        '#buttons' => $markup,
-      );
-return $build;
-
-      // Replace tokens.
-      $markup = \Drupal::token()->replace($markup, $context);
-
-      return [
-        '#items_list' => $build,
-        '#allowed_tags' => $allowed_tags,
-//        '#cache' => [
-//          'contexts' => ['url.path']
-//        ],
+        '#buttons' => $item_list,
+        '#cache' => [
+          'contexts' => ['url.path']
+        ],
       ];
+
+      return $build;
     }
   }
-
 }
