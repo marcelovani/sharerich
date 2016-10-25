@@ -47,6 +47,27 @@ class SharerichTests extends WebTestBase {
     ), 'Sharerich Admin', TRUE); //@todo remove TRUE
   }
 
+  /**
+   * Check that an element exists in HTML markup.
+   *
+   * @param $xpath
+   *   An XPath expression.
+   * @param array $arguments
+   *   (optional) An associative array of XPath replacement tokens to pass to
+   *   DrupalWebTestCase::buildXPathQuery().
+   * @param $message
+   *   The message to display along with the assertion.
+   * @param $group
+   *   The type of assertion - examples are "Browser", "PHP".
+   *
+   * @return
+   *   TRUE if the assertion succeeded, FALSE otherwise.
+   */
+  protected function assertElementByXPath($xpath, array $arguments = array(), $message, $group = 'Other') {
+    $elements = $this->xpath($xpath, $arguments);
+    return $this->assertTrue(!empty($elements[0]), $message, $group);
+  }
+
   function testLinkToConfig() {
     $this->drupalLogin($this->adminUser);
     $this->drupalGet('admin/modules');
@@ -116,7 +137,27 @@ class SharerichTests extends WebTestBase {
       $text = $this->xpath('//div[@id="block-sharerich-block"]//ul/li[@class="rrssb-' . $item . '"]//span[@class="rrssb-text"]/text()')[0][0];
       $this->assertEqual($text, $item, t('The text of :item button is correct', array(':item' => $item)));
     }
+
+    // Test that tokens were rendered correctly.
+    $this->assertElementByXPath('//div[@id="block-sharerich-block"]//ul/li[contains(@class, :li_class)]/a[contains(@href, :href)]', array(
+      ':li_class' => 'rssb-email',
+      ':href' => 'mailto:?subject=Sharerich%20page&body=http',
+    ), "Email Tokens rendered correctly.");
+
+    $this->assertElementByXPath('//div[@id="block-sharerich-block"]//ul/li[contains(@class, :li_class)]/a[contains(@href, :href)]', array(
+      ':li_class' => 'rssb-facebook',
+      ':href' => 'https://www.facebook.com/sharer/sharer.php?u=http',
+    ), "Facebook Tokens rendered correctly.");
+
+    $this->assertElementByXPath('//div[@id="block-sharerich-block"]//ul/li[contains(@class, :li_class)]/a[contains(@href, :href)]', array(
+      ':li_class' => 'rssb-tumblr',
+      ':href' => 'http://www.tumblr.com/share?s=&v=3&t=Sharerich%20page&u=http',
+    ), "Tumblr Tokens rendered correctly.");
+
+    $this->assertElementByXPath('//div[@id="block-sharerich-block"]//ul/li[contains(@class, :li_class)]/a[contains(@href, :href)]', array(
+      ':li_class' => 'rssb-twitter',
+      ':href' => 'https://twitter.com/intent/tweet?url=http',
+    ), "Twitter Tokens rendered correctly.");
   }
 }
-//@todo: Write test for tokens
 //@todo: Write text for contextual link
