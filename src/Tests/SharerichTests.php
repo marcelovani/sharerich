@@ -2,9 +2,11 @@
 
 namespace Drupal\sharerich\Tests;
 
-use \Drupal\simpletest\WebTestBase;
-use \Drupal\node\Entity\Node;
-use \Drupal\node\Entity\NodeType;
+use Drupal\simpletest\WebTestBase;
+use Drupal\node\Entity\Node;
+use Drupal\node\Entity\NodeType;
+use Drupal\Component\Serialization\Json;
+
 /**
  * Sharerich tests.
  *
@@ -17,7 +19,7 @@ class SharerichTests extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('block', 'node', 'field', 'text', 'sharerich');
+  public static $modules = array('block', 'contextual', 'node', 'field', 'text', 'sharerich');
 
   /**
    * A user with the 'Administer sharerich' permission.
@@ -43,7 +45,9 @@ class SharerichTests extends WebTestBase {
     // Create admin user.
     $this->adminUser = $this->drupalCreateUser(array(
       'access administration pages',
-      'administer sharerich'
+      'administer sharerich',
+      'administer blocks',
+      'access contextual links',
     ), 'Sharerich Admin', TRUE); //@todo remove TRUE
   }
 
@@ -158,6 +162,19 @@ class SharerichTests extends WebTestBase {
       ':li_class' => 'rssb-twitter',
       ':href' => 'https://twitter.com/intent/tweet?url=http',
     ), "Twitter Tokens rendered correctly.");
+
+    // Test contextual links.
+    $block_id = 'sharerich_block';
+    $id = 'block:block=' . $block_id . ':langcode=en|sharerich:sharerich=default:langcode=en';
+    // @see \Drupal\contextual\Tests\ContextualDynamicContextTest:assertContextualLinkPlaceHolder()
+    $this->assertRaw('<div data-contextual-id="' . $id . '"></div>', t('Contextual link placeholder with id @id exists.', array('@id' => $id)));
+
+    // Get server-rendered contextual links.
+    // @see \Drupal\contextual\Tests\ContextualDynamicContextTest:renderContextualLinks()
+    $post = array('ids[0]' => $id);
+    $response = $this->drupalPost('contextual/render', 'application/json', $post, array('query' => array('destination' => 'test-page')));
+    $this->assertResponse(200);
+    $json = Json::decode($response);
+    $this->assertIdentical($json[$id], '<ul class="contextual-links"><li class="block-configure"><a href="/admin/structure/block/manage/sharerich_block">Configure block</a></li><li class="entitysharerich-edit-form"><a href="/admin/structure/sharerich/default">Edit Sharerich set</a></li></ul>', t('Contextual links are correct.'));
   }
 }
-//@todo: Write text for contextual link

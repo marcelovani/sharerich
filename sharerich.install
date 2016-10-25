@@ -14,16 +14,16 @@ function sharerich_install() {
   // Create default block.
   entity_create('block', array(
     'id' => 'sharerich_block',
-    'label' => 'Share this',
+    'label' => t('Share this'),
     'type' => 'sharerich',
     'theme' => $default_theme,
     'region' => 'content',
-    'weight' => 0,
+    'weight' => -10,
     'provider' => NULL,
     'plugin' => 'sharerich',
     'settings' => array(
       'id' => 'sharerich_block',
-      'label' => 'Share this',
+      'label' => t('Share this'),
       'provider' => 'sharerich',
       'label_display' => 'visible',
       'sharerich_set' => 'default',
