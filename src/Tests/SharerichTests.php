@@ -19,7 +19,7 @@ class SharerichTests extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('block', 'contextual', 'node', 'field', 'text', 'sharerich');
+  public static $modules = array('block', 'token', 'contextual', 'node', 'field', 'text', 'sharerich');
 
   /**
    * A user with the 'Administer sharerich' permission.
