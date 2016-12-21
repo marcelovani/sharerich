@@ -18,31 +18,8 @@
 			"role": "Maintainer"
 		}
 	],
-	"repositories": [
-		{
-			"type": "package",
-			"package": {
-				"name": "kni-labs/rrssb",
-				"version": "1.13.1",
-				"type": "drupal-library",
-				"source": {
-					"url": "https://github.com/kni-labs/rrssb.git",
-					"type": "git",
-					"reference": "master"
-				},
-				"dist": {
-					"url": "https://github.com/kni-labs/rrssb/archive/1.13.1.zip",
-					"type": "zip"
-				},
-				"require": {
-					"composer/installers": "~1.0"
-				}
-			}
-		}
-	],
 	"require": {
-		"php": ">=5.5.0",
-		"kni-labs/rrssb": "~1.0"
+		"php": ">=5.5.0"
 	},
 	"extra": {
 		"installer-paths": {

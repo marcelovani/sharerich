@@ -9,6 +9,40 @@ Installation
 Put the modules into your sites/module/contrib folder and enable the module.
 Go to the permissions page and set them accordingly.
 
+Requiring RRSSB library
+=======================
+Add this vcs to your main composer.json
+
+	"repositories": [
+		{
+			"type": "package",
+			"package": {
+				"name": "kni-labs/rrssb",
+				"version": "1.13.1",
+				"type": "drupal-library",
+				"source": {
+					"url": "https://github.com/kni-labs/rrssb.git",
+					"type": "git",
+					"reference": "master"
+				},
+				"dist": {
+					"url": "https://github.com/kni-labs/rrssb/archive/1.13.1.zip",
+					"type": "zip"
+				},
+				"require": {
+					"composer/installers": "~1.0"
+				}
+			}
+		}
+	]
+
+then
+
+	"require": {
+		"php": ">=5.5.0",
+		"kni-labs/rrssb": "~1.0"
+	}
+
 Configuration
 =============
 - Visit /admin/config/sharerich/settings for general settings;
