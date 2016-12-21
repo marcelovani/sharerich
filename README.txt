@@ -53,4 +53,3 @@ Notes
 TODO
 ====
 - google_analytics_et (If the module is enabled, GA event tracking will be added to the share buttons)
-- Add contextual link on the blocks, linking to admin/structure/sharerich/{id}
