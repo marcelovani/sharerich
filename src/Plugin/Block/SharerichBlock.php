@@ -51,7 +51,7 @@ class SharerichBlock extends BlockBase {
     $form['sticky'] = array(
       '#type' => 'checkbox',
       '#title' => t('Sticky'),
-      '#default_value' => $configuration['sticky'],
+      '#default_value' => isset($configuration['sticky']) ? $configuration['sticky'] : 0,
       '#description' => t('Stick to the top when scrolling.'),
       '#states' => array(
         'visible' => array(
