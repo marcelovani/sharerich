@@ -77,7 +77,7 @@ class SharerichTests extends WebTestBase {
     $this->drupalGet('admin/modules');
     $link = $this->xpath('//a[contains(@href, :href) and contains(@id, :id)]', [
       ':href' => 'admin/structure/sharerich',
-      ':id' => 'edit-modules-sharing-sharerich-links-configure'
+      ':id' => 'edit-modules-sharerich-links-configure'
     ]);
     $this->assertTrue(count($link) === 1, 'Link to config is present');
   }
