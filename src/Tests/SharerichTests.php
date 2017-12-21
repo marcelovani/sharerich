@@ -144,22 +144,22 @@ class SharerichTests extends WebTestBase {
 
     // Test that tokens were rendered correctly.
     $this->assertElementByXPath('//div[@id="block-sharerich-block"]//ul/li[contains(@class, :li_class)]/a[contains(@href, :href)]', array(
-      ':li_class' => 'rssb-email',
+      ':li_class' => 'rrssb-email',
       ':href' => 'mailto:?subject=Sharerich%20page&body=http',
     ), "Email Tokens rendered correctly.");
 
     $this->assertElementByXPath('//div[@id="block-sharerich-block"]//ul/li[contains(@class, :li_class)]/a[contains(@href, :href)]', array(
-      ':li_class' => 'rssb-facebook',
+      ':li_class' => 'rrssb-facebook',
       ':href' => 'https://www.facebook.com/sharer/sharer.php?u=http',
     ), "Facebook Tokens rendered correctly.");
 
     $this->assertElementByXPath('//div[@id="block-sharerich-block"]//ul/li[contains(@class, :li_class)]/a[contains(@href, :href)]', array(
-      ':li_class' => 'rssb-tumblr',
+      ':li_class' => 'rrssb-tumblr',
       ':href' => 'http://www.tumblr.com/share?s=&v=3&t=Sharerich%20page&u=http',
     ), "Tumblr Tokens rendered correctly.");
 
     $this->assertElementByXPath('//div[@id="block-sharerich-block"]//ul/li[contains(@class, :li_class)]/a[contains(@href, :href)]', array(
-      ':li_class' => 'rssb-twitter',
+      ':li_class' => 'rrssb-twitter',
       ':href' => 'https://twitter.com/intent/tweet?url=http',
     ), "Twitter Tokens rendered correctly.");
 
