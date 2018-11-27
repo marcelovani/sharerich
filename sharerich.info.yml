@@ -1,10 +1,9 @@
 name: 'Sharerich'
-project: sharerich
-description: 'Responsive sharing buttons'
+description: 'Responsive sharing buttons.'
 core: 8.x
 package: 'Sharing'
 type: module
 dependencies:
-- token
-- block
+  - token:token
+  - drupal:block
 configure: entity.sharerich.collection
