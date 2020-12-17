@@ -67,13 +67,13 @@ class SharerichForm extends EntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        \Drupal::messenger()->addMessage($this->t('Created the %id Sharerich.', [
+        $this->messenger()->addMessage($this->t('Created the %id Sharerich.', [
           '%id' => $sharerich_set->id(),
         ]));
         break;
 
       default:
-        \Drupal::messenger()->addMessage($this->t('Updated the %id Sharerich.', [
+        $this->messenger()->addMessage($this->t('Updated the %id Sharerich.', [
           '%id' => $sharerich_set->id(),
         ]));
         // Clear block cache.

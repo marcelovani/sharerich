@@ -7,6 +7,8 @@
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Drupal\Core\Url;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Block\BlockPluginInterface;
 
 /**
  * Implements hook_help().
@@ -67,8 +69,7 @@ function sharerich_sharerich_buttons_alter(&$buttons) {
  */
 function sharerich_get_default_services() {
   $dir = drupal_get_path('module', 'sharerich') . '/services';
-  $file_system = \Drupal::service('file_system');
-  $list = $file_system->scanDirectory($dir, '/.inc/', array(), 0);
+  $list = \Drupal::service('file_system')->scanDirectory($dir, '/.inc/', array(), 0);
   return array_map(function ($service) {
     return $service->name;
   }, $list);
@@ -95,7 +96,7 @@ function sharerich_allowed_tags() {
   $allowed_tags = \Drupal::config('sharerich.settings')->get('allowed_html');
   // Convert to array.
   $allowed_tags = str_replace(['<', '>'], '', $allowed_tags);
-  $allowed_tags = \Drupal\Component\Utility\Html::escape($allowed_tags);
+  $allowed_tags = Html::escape($allowed_tags);
   $allowed_tags = explode(' ', $allowed_tags);
 
   return $allowed_tags;
@@ -135,7 +136,7 @@ function _sharerich_get_token_data() {
  * @param array $build
  * @param \Drupal\Core\Block\BlockPluginInterface $block
  */
-function sharerich_block_view_alter(array &$build, \Drupal\Core\Block\BlockPluginInterface $block) {
+function sharerich_block_view_alter(array &$build, BlockPluginInterface $block) {
   if ($block->getPluginId() == 'sharerich') {
     $build['#contextual_links']['sharerich'] = array(
       'route_parameters' => array('sharerich' => $block->getConfiguration()['sharerich_set']),

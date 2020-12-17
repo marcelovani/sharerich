@@ -7,7 +7,7 @@
 use Drupal\Core\Render\BubbleableMetadata;
 use Drupal\Core\Render\Element;
 use Drupal\Component\Render\PlainTextOutput;
-
+use Drupal\Component\Utility\Html;
 /**
  * Implements hook_token_info().
  */
@@ -61,32 +61,32 @@ function sharerich_tokens($type, $tokens, array $data, array $options, Bubbleabl
       $value = '';
       switch ($name) {
         case 'fb_app_id':
-          $value = \Drupal\Component\Utility\Html::escape(\Drupal::config('sharerich.settings')
+          $value = Html::escape(\Drupal::config('sharerich.settings')
             ->get('facebook_app_id'));
           break;
 
         case 'fb_site_url':
-          $value = \Drupal\Component\Utility\Html::escape(\Drupal::config('sharerich.settings')
+          $value = Html::escape(\Drupal::config('sharerich.settings')
             ->get('facebook_site_url'));
           break;
 
         case 'youtube_username':
-          $value = \Drupal\Component\Utility\Html::escape(\Drupal::config('sharerich.settings')
+          $value = Html::escape(\Drupal::config('sharerich.settings')
             ->get('youtube_username'));
           break;
 
         case 'github_username':
-          $value = \Drupal\Component\Utility\Html::escape(\Drupal::config('sharerich.settings')
+          $value = Html::escape(\Drupal::config('sharerich.settings')
             ->get('github_username'));
           break;
 
         case 'instagram_username':
-          $value = \Drupal\Component\Utility\Html::escape(\Drupal::config('sharerich.settings')
+          $value = Html::escape(\Drupal::config('sharerich.settings')
             ->get('instagram_username'));
           break;
 
         case 'twitter_user':
-          $value = \Drupal\Component\Utility\Html::escape(\Drupal::config('sharerich.settings')
+          $value = Html::escape(\Drupal::config('sharerich.settings')
             ->get('twitter_user'));
           break;
 
