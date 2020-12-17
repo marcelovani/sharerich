@@ -2,7 +2,7 @@
 
 namespace Drupal\sharerich\Tests;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\Tests\BrowserTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Component\Serialization\Json;
@@ -12,7 +12,12 @@ use Drupal\Component\Serialization\Json;
  *
  * @group sharerich
  */
-class SharerichTests extends WebTestBase {
+class SharerichTests extends BrowserTestBase {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $defaultTheme = 'stark';
 
   /**
    * Modules to enable.
@@ -98,12 +103,12 @@ class SharerichTests extends WebTestBase {
       $element = $this->xpath('//input[@type="checkbox" and @name="services[' . $item . '][enabled]" and @checked="checked"]');
       $this->assertTrue(count($element) === 1, t('The :item is checked.', [':item' => ucfirst($item)]));
 
-      $actual = (string) $this->xpath('//textarea[@name="services[' . $item . '][markup]"]')[0];
-      $expected = (string) $this->xpath('//input[@type="hidden"][@name="services[' . $item . '][default_markup]"]/@value')[0];
+      $actual = $this->xpath('//textarea[@name="services[' . $item . '][markup]"]');
+      $expected = $this->xpath('//input[@type="hidden"][@name="services[' . $item . '][default_markup]"]/@value');
       // Normalize strings.
-      $actual=preg_replace('/(\r\n|\r|\n|\s|\t)/s'," ",$actual);
-      $expected=preg_replace('/(\r\n|\r|\n|\s|\t)/s'," ",$expected);
-      $this->assertTrue($actual == $expected, t('The :item widget is correct.', [':item' => ucfirst($item)]));
+      $actual=preg_replace('/(\r\n|\r|\n|\s|\t)/s',"",$actual[0]->getText());
+      $expected=preg_replace('/(\r\n|\r|\n|\s|\t)/s',"",$expected[0]->getText());
+      $this->assertEquals($actual, $expected, t('The :item widget is correct.', [':item' => $item]));
     }
   }
 
@@ -131,15 +136,15 @@ class SharerichTests extends WebTestBase {
     $url = \Drupal\Core\Url::fromRoute('entity.node.canonical', ['node' => $page->id()]);
     $this->drupalGet($url->toString());
 
-    $text = $this->xpath('//div[@id="block-sharerich-block"]/h2/text()')[0][0];
-    $this->assertEqual($text, t('Share this'), 'The title of sharerich block is correct');
+    $text = $this->xpath('//div[@id="block-sharerich-block"]//h2');
+    $this->assertEqual($text[0]->getText(), t('Share this'), t("The title of sharerich block is correct"));
 
-    $element = $this->xpath('//div[contains(@class, "sharerich-wrapper") and contains(@class, "sharerich-vertical") and contains(@class, "sharerich-sticky")]');
-    $this->assertTrue(!empty($element), 'Found a sticky sharerich block');
+    $elements = $this->xpath('//ul[contains(@class, :class)]/li', [':class' => 'sharerich-buttons']);
+    $this->assertTrue(!empty($elements), 'Found a sticky sharerich block');
 
     foreach ($this->services as $item) {
-      $text = $this->xpath('//div[@id="block-sharerich-block"]//ul/li[@class="rrssb-' . $item . '"]//span[@class="rrssb-text"]/text()')[0][0];
-      $this->assertEqual($text, $item, t('The text of :item button is correct', [':item' => $item]));
+      $text = $this->xpath('//div[@id="block-sharerich-block"]//ul/li[@class="rrssb-' . $item . '"]//span[@class="rrssb-text"]');
+      $this->assertEqual($text[0]->getText(), $item, t('The text of :item button is correct', [':item' => $item]));
     }
 
     // Test that tokens were rendered correctly.

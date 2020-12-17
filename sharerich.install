@@ -5,6 +5,8 @@
  * Install, update, and uninstall functions for the sharerich module.
  */
 
+use Drupal\block\Entity\Block;
+
 /**
  * Implements hook_install().
  */
@@ -12,7 +14,7 @@ function sharerich_install() {
   $default_theme = \Drupal::config('system.theme')->get('default');
 
   // Create default block.
-  entity_create('block', array(
+  Block::create(array(
     'id' => 'sharerich_block',
     'label' => t('Share this'),
     'type' => 'sharerich',
@@ -37,7 +39,7 @@ function sharerich_install() {
  * Migrate sharerich sets and blocks.
  */
 function sharerich_update_8300() {
-  $query = db_select('config', 'c');
+  $query = \Drupal::database()->select('config', 'c');
   $query->addField('c', 'name');
   $query->addField('c', 'data');
   $query->condition('data', '%sharerich%', 'LIKE');
@@ -51,7 +53,7 @@ function sharerich_update_8300() {
       if ($data['plugin'] == 'sharerich_block') {
         $data['plugin'] = 'sharerich';
         $data['settings']['id'] = $data['id'];
-        db_update('config')
+        \Drupal::database()->update('config')
           ->condition('name', $item->name)
           ->fields([
             'data' => serialize($data),
@@ -61,7 +63,7 @@ function sharerich_update_8300() {
     }
     if (substr($item->name, 0, 19) == 'sharerich.sharerich') {
       // Migrate sharerich sets.
-      db_update('config')
+      \Drupal::database()->update('config')
         ->condition('name', $item->name)
         ->fields([
           'name' => str_replace('sharerich.sharerich', 'sharerich.set', $item->name),

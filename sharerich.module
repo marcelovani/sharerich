@@ -6,6 +6,7 @@
 
 use Drupal\Core\Routing\RouteMatchInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_help().
@@ -14,13 +15,13 @@ function sharerich_help($route_name, RouteMatchInterface $route_match) {
   switch ($route_name) {
     case 'sharerich.admin_settings_form':
       $output = '';
-      $output .= '<p>' . t('You can manage your Sharerich sets at <a href=":menu-settings">Structure > Sharerich</a>.', array(':menu-settings' => \Drupal::url('entity.sharerich.collection'))) . '</p>';
+      $output .= '<p>' . t('You can manage your Sharerich sets at <a href=":menu-settings">Structure > Sharerich</a>.', array(':menu-settings' => Url::fromRoute('entity.sharerich.collection'))) . '</p>';
       return $output;
       break;
 
     case 'entity.sharerich.collection':
       $output = '';
-      $output .= '<p>' . t('Global settings are available at the <a href=":menu-settings">configuration page</a>.', array(':menu-settings' => \Drupal::url('sharerich.admin_settings_form'))) . '</p>';
+      $output .= '<p>' . t('Global settings are available at the <a href=":menu-settings">configuration page</a>.', array(':menu-settings' => Url::fromRoute('sharerich.admin_settings_form'))) . '</p>';
       return $output;
       break;
 
@@ -66,7 +67,8 @@ function sharerich_sharerich_buttons_alter(&$buttons) {
  */
 function sharerich_get_default_services() {
   $dir = drupal_get_path('module', 'sharerich') . '/services';
-  $list = file_scan_directory($dir, '/.inc/', array(), 0);
+  $file_system = \Drupal::service('file_system');
+  $list = $file_system->scanDirectory($dir, '/.inc/', array(), 0);
   return array_map(function ($service) {
     return $service->name;
   }, $list);

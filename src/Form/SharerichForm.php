@@ -67,13 +67,13 @@ class SharerichForm extends EntityForm {
 
     switch ($status) {
       case SAVED_NEW:
-        drupal_set_message($this->t('Created the %id Sharerich.', [
+        \Drupal::messenger()->addMessage($this->t('Created the %id Sharerich.', [
           '%id' => $sharerich_set->id(),
         ]));
         break;
 
       default:
-        drupal_set_message($this->t('Updated the %id Sharerich.', [
+        \Drupal::messenger()->addMessage($this->t('Updated the %id Sharerich.', [
           '%id' => $sharerich_set->id(),
         ]));
         // Clear block cache.
@@ -81,7 +81,7 @@ class SharerichForm extends EntityForm {
 
     }
     // Redirect.
-    $form_state->setRedirectUrl($sharerich_set->urlInfo('collection'));
+    $form_state->setRedirectUrl($sharerich_set->toUrl('collection'));
   }
 
   /**

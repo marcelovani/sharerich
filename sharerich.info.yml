@@ -1,6 +1,7 @@
 name: 'Sharerich'
 description: 'Responsive sharing buttons.'
 core: 8.x
+core_version_requirement: ^8 || ^9
 package: 'Sharing'
 type: module
 dependencies:
