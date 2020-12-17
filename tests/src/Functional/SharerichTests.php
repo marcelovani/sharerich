@@ -1,18 +1,24 @@
 <?php
 
-namespace Drupal\sharerich\Tests;
+namespace Drupal\Tests\sharerich\Functional;
 
 use Drupal\Tests\BrowserTestBase;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 
 /**
  * Sharerich tests.
  *
  * @group sharerich
+ *
+ * Class SharerichTests
+ * @package Drupal\Tests\sharerich\Functional
  */
 class SharerichTests extends BrowserTestBase {
+
+  use StringTranslationTrait;
 
   /**
    * {@inheritdoc}
@@ -20,11 +26,16 @@ class SharerichTests extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
+   * {@inheritdoc}
+   */
+  protected $profile = 'minimal';
+
+  /**
    * Modules to enable.
    *
    * @var array
    */
-  public static $modules = ['block', 'token', 'contextual', 'node', 'field', 'text', 'sharerich'];
+  protected static $modules = ['block', 'token', 'contextual', 'node', 'field', 'text', 'sharerich'];
 
   /**
    * A user with the 'Administer sharerich' permission.
@@ -101,14 +112,14 @@ class SharerichTests extends BrowserTestBase {
     foreach ($this->services as $item) {
       // Assert that the checkboxes are ticked.
       $element = $this->xpath('//input[@type="checkbox" and @name="services[' . $item . '][enabled]" and @checked="checked"]');
-      $this->assertTrue(count($element) === 1, t('The :item is checked.', [':item' => ucfirst($item)]));
+      $this->assertTrue(count($element) === 1, $this->t('The :item is checked.', [':item' => ucfirst($item)]));
 
       $actual = $this->xpath('//textarea[@name="services[' . $item . '][markup]"]');
       $expected = $this->xpath('//input[@type="hidden"][@name="services[' . $item . '][default_markup]"]/@value');
       // Normalize strings.
       $actual=preg_replace('/(\r\n|\r|\n|\s|\t)/s',"",$actual[0]->getText());
       $expected=preg_replace('/(\r\n|\r|\n|\s|\t)/s',"",$expected[0]->getText());
-      $this->assertEquals($actual, $expected, t('The :item widget is correct.', [':item' => $item]));
+      $this->assertEquals($actual, $expected, $this->t('The :item widget is correct.', [':item' => $item]));
     }
   }
 
@@ -137,14 +148,14 @@ class SharerichTests extends BrowserTestBase {
     $this->drupalGet($url->toString());
 
     $text = $this->xpath('//div[@id="block-sharerich-block"]//h2');
-    $this->assertEqual($text[0]->getText(), t('Share this'), t("The title of sharerich block is correct"));
+    $this->assertEqual($text[0]->getText(), $this->t('Share this'), t("The title of sharerich block is correct"));
 
     $elements = $this->xpath('//ul[contains(@class, :class)]/li', [':class' => 'sharerich-buttons']);
     $this->assertTrue(!empty($elements), 'Found a sticky sharerich block');
 
     foreach ($this->services as $item) {
       $text = $this->xpath('//div[@id="block-sharerich-block"]//ul/li[@class="rrssb-' . $item . '"]//span[@class="rrssb-text"]');
-      $this->assertEqual($text[0]->getText(), $item, t('The text of :item button is correct', [':item' => $item]));
+      $this->assertEqual($text[0]->getText(), $item, $this->t('The text of :item button is correct', [':item' => $item]));
     }
 
     // Test that tokens were rendered correctly.
@@ -178,6 +189,6 @@ class SharerichTests extends BrowserTestBase {
     // $response = $this->drupalPost('contextual/render', 'application/json', ['ids[0]' => $id], ['query' => ['destination' => 'test-page']]);
     // $this->assertResponse(200);
     // $json = Json::decode($response);
-    //$this->assertIdentical($json[$id], '<ul class="contextual-links"><li class="block-configure"><a href="/admin/structure/block/manage/sharerich_block">Configure block</a></li><li class="entitysharerich-edit-form"><a href="/admin/structure/sharerich/default">Edit Sharerich set</a></li></ul>', t('Contextual links are correct.'));
+    //$this->assertIdentical($json[$id], '<ul class="contextual-links"><li class="block-configure"><a href="/admin/structure/block/manage/sharerich_block">Configure block</a></li><li class="entitysharerich-edit-form"><a href="/admin/structure/sharerich/default">Edit Sharerich set</a></li></ul>', $this->t('Contextual links are correct.'));
   }
 }
