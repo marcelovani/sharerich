@@ -8,7 +8,10 @@
 namespace Drupal\sharerich\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Routing\RedirectDestinationTrait;
+
 /**
  * Provides a Sharerich block.
  *
@@ -19,46 +22,48 @@ use Drupal\Core\Routing\RedirectDestinationTrait;
  */
 class SharerichBlock extends BlockBase {
 
+  use StringTranslationTrait;
+
   /**
    * {@inheritdoc}
    */
-  public function blockForm($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function blockForm($form, FormStateInterface $form_state) {
     $form = parent::blockForm($form, $form_state);
     $configuration = $this->configuration;
 
-    $options = array();
+    $options = [];
     $entity_storage = \Drupal::entityTypeManager()->getStorage('sharerich');
     foreach ($entity_storage->loadMultiple() as $entity) {
       $entity_id = $entity->id();
       $options[$entity_id] = $entity->label();
     }
 
-    $form['sharerich_set'] = array(
+    $form['sharerich_set'] = [
       '#type' => 'select',
-      '#title' => t('Sharerich Set'),
+      '#title' => $this->t('Sharerich Set'),
       '#options' => $options,
-      '#default_value' => isset($configuration['sharerich_set']) ? $configuration['sharerich_set'] : array(),
-    );
+      '#default_value' => isset($configuration['sharerich_set']) ? $configuration['sharerich_set'] : [],
+    ];
 
-    $form['orientation'] = array(
+    $form['orientation'] = [
       '#type' => 'select',
-      '#title' => t('Orientation'),
-      '#options' => array('horizontal' => t('Horizontal'), 'vertical' => t('Vertical')),
-      '#default_value' => isset($configuration['orientation']) ? $configuration['orientation'] : array(),
+      '#title' => $this->t('Orientation'),
+      '#options' => ['horizontal' => t('Horizontal'), 'vertical' => t('Vertical')],
+      '#default_value' => isset($configuration['orientation']) ? $configuration['orientation'] : [],
       '#description' => t('If you set to vertical and place the block on the top of the main content area, it will float on the side.'),
-    );
+    ];
 
-    $form['sticky'] = array(
+    $form['sticky'] = [
       '#type' => 'checkbox',
-      '#title' => t('Sticky'),
+      '#title' => $this->t('Sticky'),
       '#default_value' => isset($configuration['sticky']) ? $configuration['sticky'] : 0,
-      '#description' => t('Stick to the top when scrolling.'),
-      '#states' => array(
-        'visible' => array(
-          ':input[name="settings[orientation]"]' => array('value' => 'vertical'),
-        ),
-      ),
-    );
+      '#description' => $this->t('Stick to the top when scrolling.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="settings[orientation]"]' => ['value' => 'vertical'],
+        ],
+      ],
+    ];
 
     return $form;
   }
@@ -66,7 +71,7 @@ class SharerichBlock extends BlockBase {
   /**
    * Overrides \Drupal\block\BlockBase::blockSubmit().
    */
-  public function blockSubmit($form, \Drupal\Core\Form\FormStateInterface $form_state) {
+  public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['sharerich_set'] = $form_state->getValue('sharerich_set');
     $this->configuration['orientation'] = $form_state->getValue('orientation');
     $this->configuration['sticky'] = $form_state->getValue('sticky');

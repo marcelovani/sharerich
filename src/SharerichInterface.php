@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\sharerich\SharerichInterface.
- */
-
 namespace Drupal\sharerich;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;

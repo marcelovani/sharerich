@@ -1,48 +1,50 @@
 <?php
+
 /**
  * @file
  * Contains sharerich.module..
  */
 
-use Drupal\Core\Routing\RouteMatchInterface;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
-use Drupal\Core\Url;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Block\BlockPluginInterface;
+use Drupal\Core\Link;
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Routing\RouteObjectInterface;
+use Drupal\Core\Url;
 
 /**
  * Implements hook_help().
  */
 function sharerich_help($route_name, RouteMatchInterface $route_match) {
+  $output = '';
+
   switch ($route_name) {
     case 'sharerich.admin_settings_form':
-      $output = '';
-      $output .= '<p>' . t('You can manage your Sharerich sets at <a href=":menu-settings">Structure > Sharerich</a>.', [':menu-settings' => Url::fromRoute('entity.sharerich.collection')->toString()]) . '</p>';
-      return $output;
+      $output .= '<p>' . Link::fromTextAndUrl(t('Manage Sharerich sets'), Url::fromRoute('entity.sharerich.collection'))->toString() . '</p>';
       break;
 
     case 'entity.sharerich.collection':
-      $output = '';
-      $output .= '<p>' . t('Global settings are available at the <a href=":menu-settings">configuration page</a>.', [':menu-settings' => Url::fromRoute('sharerich.admin_settings_form')->toString()]) . '</p>';
-      return $output;
+      $output .= '<p>' . Link::fromTextAndUrl(t('Global settings'), Url::fromRoute('sharerich.admin_settings_form'))->toString() . '</p>';
       break;
 
     default:
   }
+
+  return $output;
 }
 
 /**
  * Implements hook_theme().
  */
 function sharerich_theme() {
-  return array(
-    'sharerich' => array(
-      'variables' => array(
+  return [
+    'sharerich' => [
+      'variables' => [
         'buttons' => '',
-      ),
+      ],
       'template' => 'sharerich',
-    ),
-  );
+    ],
+  ];
 }
 
 /**
@@ -68,8 +70,8 @@ function sharerich_sharerich_buttons_alter(&$buttons) {
  * @return A list of file names.
  */
 function sharerich_get_default_services() {
-  $dir = drupal_get_path('module', 'sharerich') . '/services';
-  $list = \Drupal::service('file_system')->scanDirectory($dir, '/.inc/', array(), 0);
+  $dir = \Drupal::service('extension.list.module')->getPath('sharerich') . '/services';
+  $list = \Drupal::service('file_system')->scanDirectory($dir, '/.inc/', [], 0);
   return array_map(function ($service) {
     return $service->name;
   }, $list);
@@ -79,7 +81,7 @@ function sharerich_get_default_services() {
  * Helper to load services from the disk.
  */
 function sharerich_load_default_service($service_name) {
-  $dir = drupal_get_path('module', 'sharerich') . '/services';
+  $dir = \Drupal::service('extension.list.module')->getPath('sharerich') . '/services';
   $service_name = $dir . '/' . $service_name . '.inc';
   if (file_exists($service_name)) {
     return file_get_contents($service_name);
@@ -138,8 +140,8 @@ function _sharerich_get_token_data() {
  */
 function sharerich_block_view_alter(array &$build, BlockPluginInterface $block) {
   if ($block->getPluginId() == 'sharerich') {
-    $build['#contextual_links']['sharerich'] = array(
-      'route_parameters' => array('sharerich' => $block->getConfiguration()['sharerich_set']),
-    );
+    $build['#contextual_links']['sharerich'] = [
+      'route_parameters' => ['sharerich' => $block->getConfiguration()['sharerich_set']],
+    ];
   }
 }

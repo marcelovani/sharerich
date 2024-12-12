@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\sharerich\Form\SharerichDeleteForm.
- */
-
 namespace Drupal\sharerich\Form;
 
 use Drupal\Core\Entity\EntityConfirmFormBase;
@@ -15,11 +10,12 @@ use Drupal\Core\Url;
  * Builds the form to delete Sharerich entities.
  */
 class SharerichDeleteForm extends EntityConfirmFormBase {
+
   /**
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to delete %name?', array('%name' => $this->entity->label()));
+    return $this->t('Are you sure you want to delete %name?', ['%name' => $this->entity->label()]);
   }
 
   /**
